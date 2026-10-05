@@ -118,7 +118,7 @@ export default function Studio() {
   }
   function addGroup(proposal?: Proposal) {
     if (!doc || doc.groups.length >= 12) { setError('Можно создать до 12 групп.'); return false }
-    const next = fitGroup(makeGroup(doc, proposal), doc.defaultFont)
+    const next = fitGroup(makeGroup(doc, proposal), doc.defaultFont, doc.width/doc.height)
     edit(d => ({ ...d, groups: [...d.groups, next] })); setGroupId(next.id); setSlideId(next.slides[0].id); setSelected(''); setError('')
     return true
   }
@@ -135,7 +135,7 @@ export default function Studio() {
     if (target === 'group') return addGroup(proposal)
     if (!doc || !group || group.slides.length >= 20) { setError('В группе уже 20 слайдов. Выберите создание новой группы.'); return false }
     if (proposal.slides.length !== 1) { setError('Для добавления одного слайда нужен результат из одного слайда.'); return false }
-    const next = fitGroup(makeGroup(doc, proposal), doc.defaultFont).slides[0]
+    const next = fitGroup(makeGroup(doc, proposal), doc.defaultFont, doc.width/doc.height).slides[0]
     edit(d => ({ ...d, groups: d.groups.map(g => g.id === group.id ? { ...g, slides: [...g.slides, next] } : g) }))
     setSlideId(next.id); setSelected(''); setError(''); return true
   }
@@ -171,7 +171,7 @@ export default function Studio() {
   async function start() {
     const created = createDoc(settings)
     await registerFonts(created)
-    created.groups = created.groups.map(g => fitGroup(g, created.defaultFont))
+    created.groups = created.groups.map(g => fitGroup(g, created.defaultFont, created.width/created.height))
     const result = docSchema.safeParse(created)
     if (!result.success || !settings.topic.trim()) { setError('Укажите тему. Размеры должны быть от 320 до 2160 px.'); return }
     try{await saveDoc(result.data)}catch{setError('Не удалось сохранить новый проект. Освободите место в браузере и повторите.');return}

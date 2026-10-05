@@ -6,7 +6,7 @@ import { artDirectProposal } from './art-direction.ts'
 export const layoutLabels = { poster: 'Постер', split: 'Две колонки', editorial: 'Журнальная обложка', quote: 'Типографика', cards: 'Карточки', finale: 'Призыв к действию' }
 export function artworkRatio(layout:Proposal['slides'][number]['layout'],width:number,height:number) {
   if(width/height>1.25)return width*.39/(height*.8)
-  const frames={poster:[.89,.40],split:[.39,.52],editorial:[.87,.40],quote:[.32,.27],cards:[.41,.43],finale:[.31,.29]}
+  const frames={poster:[.89,.49],split:[.39,.52],editorial:[.87,.40],quote:[.32,.27],cards:[.41,.43],finale:[.31,.29]}
   const [w,h]=frames[layout];return width*w/(height*h)
 }
 export function contrastColor(background: string) {
@@ -38,8 +38,6 @@ export function composeGroup(doc: Settings, proposal: Proposal): Group {
     }
     // Decoration is always behind the reading areas and remains individually editable.
     if(doc.direction!=='minimal'){const wash = shape('rect',0,0,1,1,bg); wash.gradient = accent; wash.opacity = .08; wash.radius = 0}
-    // Generated freeform decorations stay inside the visual zone, away from copy.
-    for (const d of s.decorations.slice(0,2)) shape(d.kind,.62+d.x*.12,.63+d.y*.08,Math.min(d.width,.16),Math.min(d.height,.12),accent,Math.min(d.opacity,.22),0)
     if(w/h>1.25) {
       // Landscape is reflowed into two reading zones instead of flattening a portrait.
       picture(.56,.1,.39,.80)
@@ -48,14 +46,14 @@ export function composeGroup(doc: Settings, proposal: Proposal): Group {
       text(s.body,'body',.055,.62,.45,.20,.032)
       text(s.highlight,'label',.055,.86,.44,.04,.025,fg,s.headingFont,true)
     } else if (s.layout === 'poster') {
-      picture(.055,.12,.89,.40)
-      shape('line',.065,.56,.13,.006,accent)
-      text(s.title,'heading',.065,.60,.87,.17,.093,fg,s.headingFont,true)
-      text(s.body,'body',.065,.795,.87,.09,.029)
-      if(s.highlight){text(s.highlight,'label',.24,.55,.69,.035,.023,accent,s.bodyFont,true,'right')}
+      picture(.055,.11,.89,.49)
+      shape('line',.065,.635,.13,.006,accent)
+      text(s.title,'heading',.065,.69,.87,.12,.085,fg,s.headingFont,true)
+      text(s.body,'body',.065,.825,.87,.083,.031)
+      if(s.highlight){text(s.highlight,'label',.24,.63,.69,.035,.023,accent,s.bodyFont,true,'right')}
     } else if (s.layout === 'split') {
       text(s.title,'heading',.065,.13,.87,.19,.095,fg,s.headingFont,true)
-      shape('ellipse',.53,.37,.42,.39,accent,.17)
+      if(doc.direction!=='minimal')shape('ellipse',.53,.37,.42,.39,accent,.17)
       picture(.55,.36,.39,.52)
       text(s.body,'body',.065,.42,.42,.26,.034)
       if(s.highlight){const pill=shape('rect',.065,.77,.40,.085,bg);pill.stroke=accent;pill.strokeWidth=u*.002;text(s.highlight,'label',.09,.785,.35,.055,.027,fg,s.headingFont,true)}
@@ -91,6 +89,15 @@ export function composeGroup(doc: Settings, proposal: Proposal): Group {
     shape('line',.065,.925,.87,.002,fg,.3)
     text(doc.brand?.enabled?(doc.brand.contact||s.footer||proposal.name):(s.footer || proposal.name),'brand',.065,.94,.87,.03,.019)
     if(doc.brand?.enabled&&doc.brand.logo){const aspect=doc.brand.logoAspect??1,width=Math.min(w*.055,u*.05*aspect),height=width/aspect;elements.push({id:uid(),type:'image',origin:'generated',role:'brand',name:'Логотип',src:doc.brand.logo,x:w*.735,y:h*.03,width,height,fit:'contain',rotation:0,locked:true,visible:true})}
+    // Keep requested decorations only in free space; never remap them over copy.
+    const protectedAreas=elements.filter(e=>e.type==='text'||e.type==='image'||e.type==='shape'&&e.kind==='rect'&&(e.opacity??1)>=.95)
+    for(const [index,d]of s.decorations.slice(0,2).entries()){
+      const x=Math.max(.04,Math.min(.92,d.x)),y=Math.max(.08,Math.min(.90,d.y)),width=Math.min(d.width,.2,.96-x),height=Math.min(d.height,.16,.94-y)
+      if(protectedAreas.some(e=>x*w<e.x+e.width&&x*w+width*w>e.x&&y*h<e.y+e.height&&y*h+height*h>e.y))continue
+      const decoration=shape(d.kind,x,y,width,height,accent,Math.min(d.opacity,.35))
+      decoration.name=`Декор ${index+1}`
+      elements.pop();elements.splice(doc.direction==='minimal'?0:1,0,decoration)
+    }
     return { id:uid(), layout:s.layout, title:s.title, background:bg, elements }
   }) }
 }

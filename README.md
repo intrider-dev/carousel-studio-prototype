@@ -29,7 +29,7 @@
 
 ## Style examples
 
-Each example was generated through the app's connected text and image models, then exported with the editor's PNG renderer at **1080×1350**. The same brief, copy, and poster layout make the styles easier to compare. Click an image for the full-size export.
+Each example was generated through the app's connected text and image models, then exported with the editor's PNG renderer at **1080×1350**. The brief and copy stay the same. Direction examples request their recommended composition; picture styles share one poster layout for comparison. Click an image for the full-size export.
 
 ### Project directions
 
@@ -50,7 +50,7 @@ The topic-based option shows the choices made for this brief; it is not a fixed 
 
 ### Picture styles
 
-These six examples use the same typeface and palette. Only the selected picture style changes. The lamp is a fictional subject, not a product-identity test.
+These six examples use the same layout, typeface, and palette. The selected technique determines the image: sculptural 3D, real photography, flat drawing, cutout collage, cinematic photography, or paper construction. The lamp is a fictional subject, not a product-identity test.
 
 <table>
 <tr>
@@ -153,6 +153,6 @@ npm run test:browser
 
 Browser checks require the Docker service, a browser, and npm access for Playwright CLI. The regression suite uses controlled responses and does not purchase generation requests. Live scripts are separate and can incur charges.
 
-Current baseline: **36 unit tests and 142 browser assertions**. See [development and manual checks](docs/DEVELOPMENT.md), [architecture](docs/ARCHITECTURE.md), and [project instructions](AGENTS.md).
+Current baseline: **38 unit tests and 168 browser assertions**. See [development and manual checks](docs/DEVELOPMENT.md), [architecture](docs/ARCHITECTURE.md), and [project instructions](AGENTS.md).
 
 Standard shadcn/ui components are used without theme redesign. The vendored stylesheet retains its [MIT notice](src/styles/vendor/shadcn.LICENSE.md); dependency and font licenses remain with their packages.

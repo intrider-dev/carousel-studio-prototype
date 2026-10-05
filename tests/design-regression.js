@@ -33,7 +33,7 @@ async (page) => {
  check(restyled.groups[1].id!==original.groups[0].id,'Design update creates an independent group')
  check(restyled.groups[1].slides.every(s=>s.elements.filter(e=>e.type==='text').every(e=>e.font==='Manrope Variable')),'Restyled group uses one shared type family')
  const heading=restyled.groups[1].slides[0].elements.find(e=>e.role==='heading')
- const lines=await page.evaluate(e=>{const ctx=document.createElement('canvas').getContext('2d');ctx.font=`bold ${e.size}px "${e.font}"`;let count=1,line='';for(const word of e.text.split(/\s+/)){const next=line?line+' '+word:word;if(ctx.measureText(next).width>e.width&&line){count++;line=word}else line=next}return count},heading)
+ const lines=await page.evaluate(e=>{const ctx=document.createElement('canvas').getContext('2d');ctx.font=`bold ${e.size}px "${e.font}"`;let count=1,line='';for(const word of e.text.split(/\s+/)){const next=line?line+' '+word:word;if(ctx.measureText(next).width+next.length*(e.letterSpacing??0)>e.width&&line){count++;line=word}else line=next}return count},heading)
  check(lines*heading.size*heading.lineHeight<=heading.height,'Every line of a long heading fits without fractional clipping')
  await page.waitForFunction(()=>document.querySelector('header [role="status"]')?.textContent==='Сохранено в этом браузере')
  await page.reload();await page.getByRole('button',{name:'Свойства',exact:true}).click()

@@ -22,7 +22,7 @@ export function ProposalPreview({
       try {
         const composed = makeGroup(doc, proposal);
         await loadSlideFonts(doc, composed.slides);
-        const group = fitGroup(composed, doc.defaultFont);
+        const group = fitGroup(composed, doc.defaultFont, doc.width/doc.height);
         for (const slide of group.slides) {
           const blob = await renderSlide(doc, slide, { width: 500 });
           if (!active) return;

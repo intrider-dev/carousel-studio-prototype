@@ -21,10 +21,12 @@ npm run test:browser
 
 - Unit tests cover contracts, cloning, counters, geometry, branding, and template output.
 - `editorial-prompt.test.ts` verifies shared system guidance across six text actions, unchanged source text, and preserved structured response contracts.
+- `visual-style.test.ts` verifies technique guidance through planning and both picture API paths, conflicting scene descriptions, earlier display labels, and requests with no preset.
 - Browser regressions cover layers, photos, fonts, persistence, recovery, cancellation, staged generation, analysis, project switching, and exports.
 - `dialog-edits.js` covers in-place edits, rewrite/redesign/retopic, operation preview, draft reload, stale and invalid results, group structure, picture replacement, undo/redo, and ZIP.
 - `interface-regression.js` creates its own project and checks focused workspaces, series navigation, control order, widths from 320 to 1600 px, modal focus, interrupted transitions, reduced motion, stable previews, and duplicate application protection.
 - `basic-navigation.js` checks the independent checklist flow, heading focus, keyboard slide navigation, narrow screens, saving, and ZIP download. `node tests/verify-basic-export.mjs` verifies its six PNG dimensions, file order, and ZIP CRC.
+- `style-regression.js` checks all six selected media through plan approval, reload, picture creation, and application, plus compact poster text and preservation of the starting group. Controlled pictures verify the connector rather than visual quality.
 - `node tests/server-smoke.mjs` verifies routes, input rejection, cross-origin blocking, and configuration-file isolation.
 - `tests/run-browser.mjs` creates and closes an isolated Playwright CLI session. Controlled responses avoid provider charges.
 - Verification output goes to ignored `output/playwright/`.
@@ -44,7 +46,7 @@ After those runs, `dialog-review.js` uses a controlled deletion response to chec
 
 `copy-live-start.js` and `copy-live-review.js` create a four-slide desk-organization plan through the available free text router, save its raw JSON, inspect text limits and common stock phrases, and capture the rendered preview. They require a fresh dedicated session. Pictures remain pending approval and are not purchased by these scripts. Text quality also requires reading every slide; phrase matching alone cannot establish natural language quality. Other selected models and image requests **can incur charges**.
 
-`style-gallery.js` creates one real-model example per invocation in a fresh dedicated browser session: all five project directions, followed by all six picture styles. It performs plan approval, image creation, application, technical review, and PNG/ZIP/JSON export through the interface. Successful examples advance the session index; saved phases allow retrying an unfinished example without regenerating a successful plan or picture. Run it eleven times in the same session. It **incurs provider charges** and writes final PNGs to `docs/examples/`; source projects and ZIPs stay in ignored output. The prompt keeps the same brief, copy, and poster layout. `node tests/verify-style-gallery.mjs` verifies complete catalog coverage, fonts, palettes, preserved starter slides, PNG dimensions, ZIP CRC and equality, and both README galleries. Inspect every export before publishing.
+`style-gallery.js` creates one real-model example per invocation in a fresh dedicated browser session: all five project directions, followed by all six picture styles. It performs plan approval, image creation, application, technical review, and PNG/ZIP/JSON export through the interface. Successful examples advance the session index; saved phases allow retrying an unfinished example without regenerating a successful plan or picture. Run it eleven times in the same session. It **incurs provider charges** and writes final PNGs to `docs/examples/`; source projects and ZIPs stay in ignored output. The brief and copy stay the same. Direction samples request their recommended compositions; picture styles share a poster layout. The script checks the selected medium in both connector requests. `node tests/verify-style-gallery.mjs` verifies complete catalog coverage, at least three direction compositions, fonts, palettes, compact poster text, preserved starter slides, PNG dimensions, ZIP CRC and equality, and both README galleries. These checks establish technical behavior. Inspect every export at full size and thumbnail size: flat drawing must visibly differ from photography and 3D, paper construction must change the object itself, collage must show cutout layers, and cinematic photography needs a distinct atmosphere. Do not publish indistinguishable samples as proof of style quality.
 
 ## Manual acceptance
 
@@ -68,6 +70,7 @@ After those runs, `dialog-review.js` uses a controlled deletion response to chec
 18. Open Projects and check that the editor does not move. Use Tab, Shift+Tab, and Escape; verify focus returns to Projects. Reopen a saved project.
 19. Open and close dialogue settings repeatedly. Enable the system's reduced-motion preference. Check that keyboard actions are immediate and dragging has no transition delay. During image loading, retain the preview and its frame dimensions.
 20. At 390 px, confirm the canvas precedes project controls and slides scroll horizontally. Open the simple template, edit its text, navigate with arrows, download ZIP, reload, and return to the editor.
+21. In dialogue settings, select each of the six picture styles. Request the same one-slide brief, review the plan, reload, create the picture, and apply. Check the actual technique at full size and thumbnail size, text spacing, the unchanged starting group, and PNG/ZIP export. These live requests can incur charges. Project direction and picture technique are separate settings; explicit layout requests take precedence over recommendations.
 
 ## Failure cases
 

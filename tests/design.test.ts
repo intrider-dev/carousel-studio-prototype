@@ -77,3 +77,22 @@ test('Clean direction omits unnecessary poster stars and keeps landscape reading
  const title=landscape.elements.find(e=>e.role==='heading')!,picture=landscape.elements.find(e=>e.role==='artwork')!
  assert(title.x+title.width<picture.x)
 })
+
+test('Generated decorations preserve free space and reject intersections with text or artwork',()=>{
+ for(const layout of ['poster','split','editorial','quote','cards','finale']){
+  const doc=createDoc(settings),group=makeGroup(doc,parseProposal(JSON.stringify({name:'Серия',slides:[{title:'Место для мысли',body:'Освободите стол.',layout,artwork:{src:'data:image/png;base64,AAAA',width:1024,height:1024},decorations:[{kind:'ellipse',x:.6,y:.65,width:.15,height:.1,fill:'#48654c',opacity:.7,rotation:0},{kind:'star',x:.93,y:.08,width:.03,height:.02,fill:'#48654c',opacity:.7,rotation:0}]}]})))
+  const elements=group.slides[0].elements
+  const undecorated=makeGroup(doc,parseProposal(JSON.stringify({name:'Серия',slides:[{title:'Место для мысли',body:'Освободите стол.',layout,artwork:{src:'data:image/png;base64,AAAA',width:1024,height:1024}}]})))
+  assert.equal(elements.length,undecorated.slides[0].elements.length+1,`${layout}: reject the intersecting ellipse and retain the free star`)
+  assert.equal(elements.filter(e=>e.name.startsWith('Декор ')).length,1)
+  for(const decoration of elements.filter(e=>e.name.startsWith('Декор '))){
+   assert(decoration.type==='shape'&&decoration.kind==='star')
+   const b=elementBounds(decoration)
+   assert(b.left>=0&&b.top>=0&&b.right<=doc.width&&b.bottom<=doc.height)
+   for(const reading of elements.filter(e=>e.type==='text'||e.type==='image')){
+    const a=elementBounds(reading)
+    assert(!(b.left<a.right&&b.right>a.left&&b.top<a.bottom&&b.bottom>a.top),`${layout}: decoration intersects ${reading.name}`)
+   }
+  }
+ }
+})

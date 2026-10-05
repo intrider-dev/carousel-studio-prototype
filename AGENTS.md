@@ -51,4 +51,6 @@ Browser regressions use controlled provider responses. Live scripts can spend ba
 
 Inspect actual desktop and mobile pages after visible changes. Verify saved state, recovery, and export when affected. Repeat checks invalidated by the last change. Read actual output before claiming completion.
 
+For generation and style changes, inspect each actual exported image at full size and as a feed thumbnail. Check that the selected medium is visibly recognizable, project directions differ in composition as well as color, and copy reads without clipping or oversized gaps. HTTP success, schema validity, and export checks establish technical behavior only; they do not establish visual quality. Keep the comparison brief and distinguish functional checks from visual judgment.
+
 Maintain a working verification record for substantial work without unsolicited report documents. Reports about personally completed work use first-person singular. When BBCode is requested, deliver reports in chat, use ordinary hyphens, and highlight material facts.

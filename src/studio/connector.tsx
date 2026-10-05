@@ -85,7 +85,7 @@ export function Connector({ doc, group, slideId, onProposal, onImage, onEdit, on
     try{await task()}catch(e){setError(editError(e))}finally{applying.current=false;setBusy(false);onBusy(false);setProgress('')}
   }
   async function createPictures(parsed: Proposal) {
-    const result = await illustrate(parsed, { model: imageModel, style: visualStyles[visualStyle], topic: doc.topic, projectStyle: `${doc.style}. ${directions[doc.direction??'auto'].style}`,width:doc.width,height:doc.height, references,vision:models.find(m=>m.id===imageModel)?.vision,signal:abort.current?.signal }, (next, index) => { setProposal(next); setProgress(`Создаю изображение ${index} из ${parsed.slides.length}`) })
+    const result = await illustrate(parsed, { model: imageModel, style: visualStyle, topic: doc.topic, projectStyle: `${doc.style}. ${directions[doc.direction??'auto'].style}`,width:doc.width,height:doc.height, references,vision:models.find(m=>m.id===imageModel)?.vision,signal:abort.current?.signal }, (next, index) => { setProposal(next); setProgress(`Создаю изображение ${index} из ${parsed.slides.length}`) })
     await loadSlideFonts(doc,makeGroup(doc,result.proposal).slides)
     setProposal(result.proposal)
     if (result.failures.length) setError(`Не все изображения готовы. Текст и готовые картинки сохранены. ${result.failures.join(' ')}`)
@@ -114,7 +114,7 @@ export function Connector({ doc, group, slideId, onProposal, onImage, onEdit, on
       const requestTarget=await bindTarget(doc,group,slideId,(action==='image'?'slide':scope) as 'slide'|'group');setBinding(requestTarget)
       if(action==='image')setImageLayer(group.slides.find(s=>s.id===slideId)?.elements.find(e=>e.type==='image'&&e.id===selectedLayerId)?.id||group.slides.find(s=>s.id===slideId)?.elements.find(e=>e.type==='image'&&e.role!=='brand')?.id||'')
       const snapshot=async(s:Group['slides'][number])=>{const blob=await renderSlide(doc,s,{preview:true,width:768});return new Promise<string>(resolve=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.readAsDataURL(blob)})}
-      const payload={prompt,model,action,target,requestedCount:action==='generate'?(target==='slide'?1:count):undefined,sourceText:sourceText||savedSource,context:{...contextFor(doc,group,scope==='slide'?slideId:undefined),artworkStyle:visualStyles[visualStyle],palette:palette==='auto'?'Выбери по теме и стилизации':palettes[palette],visualDirection:directions[doc.direction??'auto'].style,scenario:scenarioLabels[doc.brief?.scenario??'educational'],headingFont:font==='auto'?'Выбери выразительную пару шрифтов':font},history:messages.slice(-6)}
+      const payload={prompt,model,action,target,requestedCount:action==='generate'?(target==='slide'?1:count):undefined,sourceText:sourceText||savedSource,context:{...contextFor(doc,group,scope==='slide'?slideId:undefined),artworkStyle:visualStyle,palette:palette==='auto'?'Выбери по теме и стилизации':palettes[palette],visualDirection:directions[doc.direction??'auto'].style,scenario:scenarioLabels[doc.brief?.scenario??'educational'],headingFont:font==='auto'?'Выбери выразительную пару шрифтов':font},history:messages.slice(-6)}
       let result
       if(action==='analyze'&&!references.length){
         const selectedSlides=group.slides.filter(s=>scope==='group'||s.id===slideId),parts:string[]=[]

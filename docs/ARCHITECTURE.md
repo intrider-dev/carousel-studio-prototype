@@ -21,6 +21,7 @@ flowchart LR
 | `src/studio/interface.tsx`, `motion.ts`, `src/styles/workspace.css` | Disclosure, pending states, input-aware motion, workspace layout |
 | `src/components/ui/dialog.tsx`, `src/studio/project-library.tsx` | Standard modal primitives and local project library |
 | `shared/design.ts` | Brief, brand, and visual directions |
+| `shared/visual-styles.ts` | Picture technique catalog shared by planning and both picture APIs |
 | `shared/proposal.ts` | Generation contract and visual vocabulary |
 | `shared/edit-plan.ts`, `src/studio/edits.ts` | Validated operations, scope bindings, revisions, in-place replacement |
 | `src/studio/edit-preview.tsx` | Exact operation review and composed previews |
@@ -56,6 +57,8 @@ Interface references are public pages and official workflow documentation: [Canv
 ## Generation and export
 
 The default flow stops after a plan. Pictures start after review; retries skip existing pictures. Full-group analysis sends rendered slides in batches of three. Cancellation is best effort: a provider may have accepted or billed a request already.
+
+Picture styles use stable keys throughout the connector. The provider adds technique-specific guidance to planning and picture requests, adapting general scene descriptions and project lighting to the selected medium. Earlier display labels remain supported. Technique guidance is a generation instruction, not a visual classifier or a quality guarantee. Project directions recommend compositions without overriding a user's explicit layout. Generated decorations are retained only in unoccupied areas. Portrait poster text is fitted with final font metrics and grouped below the picture; landscape retains its separate reading zones.
 
 All six text actions share editorial guidance in the provider's system message. It favors plain verbs, short slide text, varied openings, and concrete actions over filler and stock phrases. Source facts, precise quotes, professional terms, and the requested author voice take priority over stylistic changes. Targeted operations change only requested text. Guidance does not run an automatic rewrite or guarantee model compliance; preview remains required.
 

@@ -18,8 +18,19 @@ export function fitText(e: Element, font: string): Element {
   while (next.size > 8 && !textFits(next, font)) next = { ...next, size: next.size - 1 }
   return next
 }
-export function fitGroup(group: Group, font: string): Group {
-  return { ...group, slides: group.slides.map(s => ({ ...s, elements: s.elements.map(e => fitText(e, font)) })) }
+export function fitGroup(group: Group, font: string, aspectRatio = 1): Group {
+  return { ...group, slides: group.slides.map(s => {
+    const elements=s.elements.map(e=>fitText(e,font))
+    const heading=elements.find(e=>e.type==='text'&&e.role==='heading'&&e.origin==='generated')
+    const body=elements.find(e=>e.type==='text'&&e.role==='body'&&e.origin==='generated')
+    // Group short poster copy together after the final fonts have been measured.
+    if(s.layout==='poster'&&aspectRatio<=1.25&&heading?.type==='text'&&body?.type==='text'&&body.y>=heading.y+heading.height){
+      const node=new Konva.Text({...drawingAttrs(heading,font),height:undefined})
+      heading.height=Math.ceil(node.height());node.destroy()
+      body.y=Math.min(body.y,heading.y+heading.height+heading.size*.4)
+    }
+    return {...s,elements}
+  }) }
 }
 export async function fitEditedDocument(before:Doc,after:Doc):Promise<Doc> {
   await loadSlideFonts(after,after.groups.flatMap(g=>g.slides))
