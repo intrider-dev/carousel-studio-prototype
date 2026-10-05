@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+output
+.playwright-cli
+.package-inspect
+.env
+.env.*
+provider.env
+*.pem
+*.key
+e.textContent)

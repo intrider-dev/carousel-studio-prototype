@@ -1,0 +1,26 @@
+// oxlint-disable-next-line no-unused-expressions -- Evaluated by the browser CLI.
+async (page) => {
+ await page.setViewportSize({width:1600,height:1100})
+ await page.getByLabel('Тема *',{exact:true}).fill('FORM. Керамика для тихих ежедневных ритуалов')
+ await page.getByLabel('Стиль',{exact:true}).fill('Элегантный предметный editorial: керамическая чашка, фактура глины, утренний свет. Натуральные материалы, глубокий зелёный фон, кремовая типографика, золотистый акцент. Не придумывай скидки, цены, характеристики товара и отзывы. Фотографии без текста и логотипов.')
+ await page.getByText('Задача и аудитория',{exact:true}).click()
+ await page.getByLabel('Задача серии',{exact:true}).selectOption('selling');await page.getByLabel('Слайдов в серии',{exact:true}).selectOption('4')
+ await page.getByLabel('Для кого',{exact:true}).fill('Люди, которым близки керамика и спокойные домашние ритуалы')
+ await page.getByLabel('Цель',{exact:true}).fill('Заинтересоваться визуальной коллекцией и посмотреть изделия')
+ await page.getByLabel('Призыв к действию',{exact:true}).fill('Посмотрите коллекцию')
+ await page.getByRole('button',{name:/^Премиальный/}).click()
+ await page.getByText('Бренд',{exact:true}).click()
+ await page.getByLabel('Использовать бренд',{exact:true}).check()
+ for(const [label,value] of [['Название бренда','FORM'],['Контакт или подпись','FORM / Керамика'],['Фон','#202722'],['Текст','#f5eedf'],['Акцент','#d5b982']])await page.getByLabel(label,{exact:true}).fill(value)
+ await page.getByLabel('Шрифт заголовков',{exact:true}).selectOption('Cormorant Garamond Variable')
+ await page.getByLabel('Шрифт основного текста',{exact:true}).selectOption('Montserrat Variable')
+ await page.getByRole('button',{name:'Создать проект',exact:true}).click()
+ await page.getByRole('link',{name:'Диалог',exact:true}).click()
+ await page.getByText('Настройки',{exact:false}).first().click()
+ await page.waitForFunction(()=>document.querySelector('#model')?.options.length>2)
+ await page.locator('#model').selectOption('openai/gpt-4.1')
+ await page.getByLabel('Изображения',{exact:true}).selectOption('cinematic')
+ await page.getByLabel('Запрос',{exact:true}).fill('Готовая серия из 4 слайдов FORM: 1) Тихий ритуал, poster, обложка с простой керамической чашкой в боковом солнечном свете. 2) Красота в деталях, editorial, крупный план глазури и края чашки. 3) Момент для себя, split, рука рядом с чашкой на деревянном столе. 4) Найдите свою форму, finale, лаконичный натюрморт с чашкой и веточкой. На слайде максимум 80 символов основного текста, заголовки до 35. Премиально и спокойно, оригинальные сюжеты и красивые фактуры. Это концептуальная коллекция: не утверждай свойства, которых нет в брифе. Чередуй ракурсы, но используй одинаковую чашку и палитру. На последнем кадре призыв «Посмотрите коллекцию». Без стрелок и звёзд.')
+ await page.getByRole('button',{name:'Отправить запрос',exact:true}).click()
+ return {started:true,reviewFirst:true}
+}

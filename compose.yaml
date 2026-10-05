@@ -1,0 +1,11 @@
+name: carousel-studio
+services:
+  web:
+    build: .
+    ports:
+      - "127.0.0.1:3080:3000"
+    restart: unless-stopped
+    environment:
+      LEGACY_URL: ${LEGACY_URL:-http://host.docker.internal:3002}
+    volumes:
+      - ${PROVIDER_ENV_FILE:-../carousel-studio-config/provider.env}:/run/secrets/provider.env:ro
