@@ -27,6 +27,44 @@
 - Project library in a focus-managed dialog, stable preview frames, and protected result application.
 - Short interface transitions with keyboard and reduced-motion support; canvas first on narrow screens.
 
+## Style examples
+
+Each example was generated through the app's connected text and image models, then exported with the editor's PNG renderer at **1080×1350**. The same brief, copy, and poster layout make the styles easier to compare. Click an image for the full-size export.
+
+### Project directions
+
+The topic-based option shows the choices made for this brief; it is not a fixed palette.
+
+<table>
+<tr>
+<td align="center"><strong>Topic-based</strong><br><a href="docs/examples/direction-auto.png"><img src="docs/examples/direction-auto.png" alt="Topic-based direction: desk lamp slide" width="260" height="325" /></a></td>
+<td align="center"><strong>Magazine</strong><br><a href="docs/examples/direction-editorial.png"><img src="docs/examples/direction-editorial.png" alt="Magazine direction: serif typography and warm paper palette" width="260" height="325" /></a></td>
+<td align="center"><strong>Bold</strong><br><a href="docs/examples/direction-bold.png"><img src="docs/examples/direction-bold.png" alt="Bold direction: dark palette and dimensional lamp illustration" width="260" height="325" /></a></td>
+</tr>
+<tr>
+<td align="center"><strong>Clean</strong><br><a href="docs/examples/direction-minimal.png"><img src="docs/examples/direction-minimal.png" alt="Clean direction: restrained green accents and clear hierarchy" width="260" height="325" /></a></td>
+<td align="center"><strong>Premium</strong><br><a href="docs/examples/direction-luxe.png"><img src="docs/examples/direction-luxe.png" alt="Premium direction: deep green and elegant serif typography" width="260" height="325" /></a></td>
+<td></td>
+</tr>
+</table>
+
+### Picture styles
+
+These six examples use the same typeface and palette. Only the selected picture style changes. The lamp is a fictional subject, not a product-identity test.
+
+<table>
+<tr>
+<td align="center"><strong>3D objects</strong><br><a href="docs/examples/picture-object.png"><img src="docs/examples/picture-object.png" alt="Dimensional desk lamp artwork" width="260" height="325" /></a></td>
+<td align="center"><strong>Product photography</strong><br><a href="docs/examples/picture-photo.png"><img src="docs/examples/picture-photo.png" alt="Photographic desk lamp artwork" width="260" height="325" /></a></td>
+<td align="center"><strong>Illustration</strong><br><a href="docs/examples/picture-illustration.png"><img src="docs/examples/picture-illustration.png" alt="Illustrated desk lamp artwork" width="260" height="325" /></a></td>
+</tr>
+<tr>
+<td align="center"><strong>Editorial collage</strong><br><a href="docs/examples/picture-collage.png"><img src="docs/examples/picture-collage.png" alt="Desk lamp in an editorial collage" width="260" height="325" /></a></td>
+<td align="center"><strong>Cinematic photography</strong><br><a href="docs/examples/picture-cinematic.png"><img src="docs/examples/picture-cinematic.png" alt="Desk lamp with cinematic lighting" width="260" height="325" /></a></td>
+<td align="center"><strong>Paper and textures</strong><br><a href="docs/examples/picture-paper.png"><img src="docs/examples/picture-paper.png" alt="Desk lamp with tactile paper textures" width="260" height="325" /></a></td>
+</tr>
+</table>
+
 ## Screenshots
 
 The interface currently uses Russian. FORM is a fictional demonstration collection.

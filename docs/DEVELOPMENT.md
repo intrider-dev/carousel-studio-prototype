@@ -44,6 +44,8 @@ After those runs, `dialog-review.js` uses a controlled deletion response to chec
 
 `copy-live-start.js` and `copy-live-review.js` create a four-slide desk-organization plan through the available free text router, save its raw JSON, inspect text limits and common stock phrases, and capture the rendered preview. They require a fresh dedicated session. Pictures remain pending approval and are not purchased by these scripts. Text quality also requires reading every slide; phrase matching alone cannot establish natural language quality. Other selected models and image requests **can incur charges**.
 
+`style-gallery.js` creates one real-model example per invocation in a fresh dedicated browser session: all five project directions, followed by all six picture styles. It performs plan approval, image creation, application, technical review, and PNG/ZIP/JSON export through the interface. Successful examples advance the session index; saved phases allow retrying an unfinished example without regenerating a successful plan or picture. Run it eleven times in the same session. It **incurs provider charges** and writes final PNGs to `docs/examples/`; source projects and ZIPs stay in ignored output. The prompt keeps the same brief, copy, and poster layout. `node tests/verify-style-gallery.mjs` verifies complete catalog coverage, fonts, palettes, preserved starter slides, PNG dimensions, ZIP CRC and equality, and both README galleries. Inspect every export before publishing.
+
 ## Manual acceptance
 
 1. Create a 1080×1350 project with topic, audience, goal, and call to action.

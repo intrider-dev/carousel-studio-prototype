@@ -27,6 +27,44 @@
 - Библиотека проектов в отдельном окне, стабильные превью и защита от повторного применения.
 - Короткие переходы с поддержкой клавиатуры и уменьшения анимаций; холст первым на узком экране.
 
+## Примеры оформления
+
+Каждый пример создан через подключённые к площадке модели текста и изображений и экспортирован редактором в PNG **1080×1350**. Бриф, текст и композиция «Постер» одинаковые, чтобы было проще сравнить стили. Нажмите на изображение, чтобы открыть полный размер.
+
+### Оформление проекта
+
+«По теме» показывает подбор для этого брифа, а не фиксированную палитру.
+
+<table>
+<tr>
+<td align="center"><strong>По теме</strong><br><a href="docs/examples/direction-auto.png"><img src="docs/examples/direction-auto.png" alt="Оформление по теме: слайд с настольной лампой" width="260" height="325" /></a></td>
+<td align="center"><strong>Журнальный</strong><br><a href="docs/examples/direction-editorial.png"><img src="docs/examples/direction-editorial.png" alt="Журнальный стиль: антиква и тёплая бумажная палитра" width="260" height="325" /></a></td>
+<td align="center"><strong>Смелый</strong><br><a href="docs/examples/direction-bold.png"><img src="docs/examples/direction-bold.png" alt="Смелый стиль: тёмная палитра и объёмная лампа" width="260" height="325" /></a></td>
+</tr>
+<tr>
+<td align="center"><strong>Чистый</strong><br><a href="docs/examples/direction-minimal.png"><img src="docs/examples/direction-minimal.png" alt="Чистый стиль: сдержанные зелёные акценты и ясная иерархия" width="260" height="325" /></a></td>
+<td align="center"><strong>Премиальный</strong><br><a href="docs/examples/direction-luxe.png"><img src="docs/examples/direction-luxe.png" alt="Премиальный стиль: глубокий зелёный цвет и элегантная антиква" width="260" height="325" /></a></td>
+<td></td>
+</tr>
+</table>
+
+### Стиль изображений
+
+В этих шести примерах одинаковые шрифт и палитра. Меняется только выбранный стиль изображения. Лампа - вымышленный предмет, а не проверка точного воспроизведения товара.
+
+<table>
+<tr>
+<td align="center"><strong>Объёмные 3D-объекты</strong><br><a href="docs/examples/picture-object.png"><img src="docs/examples/picture-object.png" alt="Объёмная иллюстрация настольной лампы" width="260" height="325" /></a></td>
+<td align="center"><strong>Предметные фотографии</strong><br><a href="docs/examples/picture-photo.png"><img src="docs/examples/picture-photo.png" alt="Предметная фотография настольной лампы" width="260" height="325" /></a></td>
+<td align="center"><strong>Иллюстрации</strong><br><a href="docs/examples/picture-illustration.png"><img src="docs/examples/picture-illustration.png" alt="Рисованная иллюстрация настольной лампы" width="260" height="325" /></a></td>
+</tr>
+<tr>
+<td align="center"><strong>Редакционный коллаж</strong><br><a href="docs/examples/picture-collage.png"><img src="docs/examples/picture-collage.png" alt="Настольная лампа в редакционном коллаже" width="260" height="325" /></a></td>
+<td align="center"><strong>Кинематографическая фотография</strong><br><a href="docs/examples/picture-cinematic.png"><img src="docs/examples/picture-cinematic.png" alt="Настольная лампа с кинематографическим освещением" width="260" height="325" /></a></td>
+<td align="center"><strong>Бумага и фактуры</strong><br><a href="docs/examples/picture-paper.png"><img src="docs/examples/picture-paper.png" alt="Настольная лампа с бумажными фактурами" width="260" height="325" /></a></td>
+</tr>
+</table>
+
 ## Скриншоты
 
 Интерфейс на русском. FORM - вымышленная коллекция для демонстрации.
