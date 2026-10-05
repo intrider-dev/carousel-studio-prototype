@@ -14,6 +14,8 @@
 - Brand colors, heading/body fonts, logo, and contact details.
 - Move, resize, rotate, reorder, hide, and lock text, photos, and shapes.
 - Multiple photos per slide, cropping, and editable graphic layers.
+- Consistent fonts across a series, gradient text, and curved arrows.
+- Rebuild a group's design into a new group while keeping the original layers.
 - Analyze references or a whole group; rewrite text or change the topic.
 - Local project library, saved generation drafts, partial-image retries, and JSON transfer.
 - Technical checks for text overflow, bounds, contrast, and image resolution.
@@ -94,6 +96,6 @@ npm run test:browser
 
 Browser checks require the Docker service, a browser, and npm access for Playwright CLI. The regression suite uses controlled responses and does not purchase generation requests. Live scripts are separate and can incur charges.
 
-Current baseline: **17 unit tests and 58 browser assertions**. See [development and manual checks](docs/DEVELOPMENT.md), [architecture](docs/ARCHITECTURE.md), and [project instructions](AGENTS.md).
+Current baseline: **21 unit tests and 67 browser assertions**. See [development and manual checks](docs/DEVELOPMENT.md), [architecture](docs/ARCHITECTURE.md), and [project instructions](AGENTS.md).
 
 Standard shadcn/ui components are used without theme redesign. The vendored stylesheet retains its [MIT notice](src/styles/vendor/shadcn.LICENSE.md); dependency and font licenses remain with their packages.

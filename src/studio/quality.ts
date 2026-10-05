@@ -23,7 +23,7 @@ export function inspectSlide(doc:Pick<Doc,'width'|'height'>,slide:Slide):Quality
     const center={x:e.x+e.width/2,y:e.y+e.height/2}
     let background:string|undefined=slide.background
     for(const under of visible.slice(0,i)){if(under.x<=center.x&&under.y<=center.y&&under.x+under.width>=center.x&&under.y+under.height>=center.y){if(under.type==='image')background=undefined;else if(under.type==='shape'&&under.kind==='rect'&&(under.opacity??1)>=.95&&!under.gradient&&under.rotation===0)background=under.fill}}
-    if(background&&contrastRatio(e.fill,background)<(e.bold&&e.size>=u*.028?3:4.5))add('warning','contrast','низкий контраст текста и подложки.')
+    if(background&&Math.min(contrastRatio(e.fill,background),e.gradient?contrastRatio(e.gradient,background):21)<(e.bold&&e.size>=u*.028?3:4.5))add('warning','contrast','низкий контраст текста и подложки.')
     if(!background)add('warning','photo-contrast','текст поверх фотографии. Проверьте читаемость или добавьте подложку.')
   }
   const headings=visible.filter(e=>e.type==='text'&&e.role==='heading'&&e.text.trim())

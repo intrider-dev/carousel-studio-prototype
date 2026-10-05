@@ -22,7 +22,7 @@ async (page) => {
  await page.getByRole('link',{name:'Диалог',exact:true}).click()
  let textCalls=0,imageCalls=0,context
  const analysisBatches=[]
- const art=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=800;c.height=600;const x=c.getContext('2d');x.fillStyle='#aabb99';x.fillRect(0,0,800,600);return c.toDataURL('image/png')})
+ const art=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=600;c.height=450;const x=c.getContext('2d');x.fillStyle='#aabb99';x.fillRect(0,0,600,450);return c.toDataURL('image/png')})
  await page.route('**/studio-api/complete',route=>{const b=route.request().postDataJSON();context=b.context;if(b.action==='image'){imageCalls++;return route.fulfill({json:{image:art}})}if(b.action==='analyze'){analysisBatches.push(b.references.length);return route.fulfill({json:{text:`Разбор ${b.context.positions.join(',')}`,usage:{cost:0}}})}textCalls++;return route.fulfill({json:{text:JSON.stringify({name:'FORM / Коллекция',background:'#000000',foreground:'#ffffff',accent:'#ff00ff',slides:['poster','split','cards','finale'].map((layout,i)=>({title:`Коллекция ${i+1}`,body:'Керамика для ваших ритуалов.',layout,imagePrompt:'Одна чашка',headingFont:'Oswald Variable'}))})}})})
  await page.getByRole('button',{name:'Отправить запрос',exact:true}).click()
  await page.getByRole('button',{name:'Создать изображения',exact:true}).waitFor()

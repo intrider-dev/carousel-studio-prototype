@@ -1,0 +1,45 @@
+// oxlint-disable-next-line no-unused-expressions -- Evaluated by the browser CLI.
+async (page) => {
+ const checks=[],check=(ok,label)=>{if(!ok)throw new Error(label);checks.push(label)}
+ await page.getByRole('button',{name:'Новый проект',exact:true}).click();await page.getByRole('button',{name:'Выбрать новый формат',exact:true}).click()
+ await page.getByLabel('Соотношение сторон',{exact:true}).selectOption('1:1')
+ await page.getByRole('button',{name:/^Смелый/}).click()
+ await page.getByRole('button',{name:'Создать проект',exact:true}).click()
+ await page.getByRole('button',{name:'Свойства',exact:true}).click()
+ await page.getByRole('button',{name:'Фигура',exact:true}).click()
+ await page.getByLabel('Тип фигуры',{exact:true}).selectOption('curve')
+ await page.getByLabel('Название слоя',{exact:true}).fill('Кривая')
+ const canvas=page.getByRole('region',{name:'Холст слайда',exact:true});await canvas.scrollIntoViewIfNeeded()
+ const bounds=await canvas.locator('canvas').first().boundingBox(),before=Number(await page.getByLabel('X',{exact:true}).inputValue())
+ // Grab a visible point on the curve, outside the transformer handles.
+ const x=bounds.x+bounds.width*(.15+.3*.52683),y=bounds.y+bounds.height*(.2+.2*.84501)
+ await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+30,y+20,{steps:8});await page.mouse.up()
+ check(Number(await page.getByLabel('X',{exact:true}).inputValue())>before,'Curved graphic can be dragged through canvas hit detection')
+ await page.getByRole('button',{name:'Заголовок',exact:true}).click()
+ await page.getByLabel('Текст слоя',{exact:true}).fill('Ценности: точка опоры')
+ await page.getByLabel('Градиент',{exact:true}).fill('#8858ff')
+ check(await page.getByLabel('Градиент',{exact:true}).inputValue()==='#8858ff','Gradient text editable in standard controls')
+ await page.getByRole('button',{name:'Убрать',exact:true}).click()
+ check(await page.getByRole('button',{name:'Убрать',exact:true}).isDisabled(),'Gradient can be removed')
+ await page.getByLabel('Градиент',{exact:true}).fill('#8858ff')
+ const installProbe=()=>page.evaluate(()=>{const original=URL.createObjectURL;URL.createObjectURL=function(blob){if(blob.type.includes('json'))window.projectSnapshot=blob.text();return original.call(this,blob)}})
+ await installProbe()
+ const snapshot=async()=>{const dl=page.waitForEvent('download');await page.getByRole('button',{name:'Сохранить JSON',exact:true}).click();await dl;return JSON.parse(await page.evaluate(()=>window.projectSnapshot))}
+ const original=await snapshot()
+ await page.getByRole('button',{name:'Обновить дизайн',exact:true}).click()
+ await page.waitForFunction(()=>document.querySelector('#group')?.options.length===2)
+ const restyled=await snapshot()
+ check(JSON.stringify(restyled.groups[0])===JSON.stringify(original.groups[0]),'Design update leaves every source layer unchanged')
+ check(restyled.groups[1].id!==original.groups[0].id,'Design update creates an independent group')
+ check(restyled.groups[1].slides.every(s=>s.elements.filter(e=>e.type==='text').every(e=>e.font==='Manrope Variable')),'Restyled group uses one shared type family')
+ const heading=restyled.groups[1].slides[0].elements.find(e=>e.role==='heading')
+ const lines=await page.evaluate(e=>{const ctx=document.createElement('canvas').getContext('2d');ctx.font=`bold ${e.size}px "${e.font}"`;let count=1,line='';for(const word of e.text.split(/\s+/)){const next=line?line+' '+word:word;if(ctx.measureText(next).width>e.width&&line){count++;line=word}else line=next}return count},heading)
+ check(lines*heading.size*heading.lineHeight<=heading.height,'Every line of a long heading fits without fractional clipping')
+ await page.waitForFunction(()=>document.querySelector('header [role="status"]')?.textContent==='Сохранено в этом браузере')
+ await page.reload();await page.getByRole('button',{name:'Свойства',exact:true}).click()
+ await installProbe()
+ check((await snapshot()).groups.length===2,'Restyled group survives reload')
+ const dl=page.waitForEvent('download');await page.getByRole('button',{name:'ZIP группы',exact:true}).click();await dl
+ check(true,'Updated composition exports successfully')
+ return {passed:checks.length,checks}
+}

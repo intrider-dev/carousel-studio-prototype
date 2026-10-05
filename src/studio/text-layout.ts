@@ -6,7 +6,8 @@ export function textFits(e: Element, defaultFont: string) {
   if (e.type !== 'text') return true
   const node = new Konva.Text({ ...drawingAttrs(e, defaultFont), height: undefined })
   const longestWord = Math.max(0, ...e.text.split(/\s+/u).map(word => node.measureSize(word).width))
-  const fits = node.height() <= e.height + .5 && longestWord <= e.width + .5
+  // Even a fractional extra line height can make Konva omit the final line.
+  const fits = node.height() <= e.height && longestWord <= e.width
   node.destroy()
   return fits
 }

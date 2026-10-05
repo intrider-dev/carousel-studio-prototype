@@ -4,7 +4,7 @@ export const fontNames = ['Arial', 'Georgia', 'Courier New', 'Geist Variable', '
 export const layouts = ['poster', 'split', 'editorial', 'quote', 'cards', 'finale'] as const
 export const hex = z.string().regex(/^#[0-9a-f]{6}$/i)
 export const pictureSource = z.string().max(16_000_000).regex(/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/)
-export const decorationSchema = z.object({ kind: z.enum(['rect', 'ellipse', 'arrow', 'star', 'line']), x: z.number().min(0).max(.95), y: z.number().min(0).max(.95), width: z.number().min(.02).max(1), height: z.number().min(.02).max(1), fill: hex, opacity: z.number().min(.05).max(1), rotation: z.number().min(-30).max(30) })
+export const decorationSchema = z.object({ kind: z.enum(['rect', 'ellipse', 'arrow', 'star', 'line', 'curve']), x: z.number().min(0).max(.95), y: z.number().min(0).max(.95), width: z.number().min(.02).max(1), height: z.number().min(.02).max(1), fill: hex, opacity: z.number().min(.05).max(1), rotation: z.number().min(-30).max(30) })
 export const contentSlideSchema = z.object({
   title: z.string().min(1).max(120), body: z.string().min(1).max(450), imagePrompt: z.string().max(800).default(''),
   layout: z.enum(layouts).default('poster'), kicker: z.string().max(50).default(''), highlight: z.string().max(80).default(''), footer: z.string().max(80).default(''),

@@ -47,6 +47,10 @@ Text, pictures, and graphics remain separate layers. The shared renderer rejects
 
 Standard layouts can reflow. Added or repositioned layers trigger scaling to preserve them. Export leaves the original document unchanged.
 
+The compositor enforces one font pair across a generated group, including automatic direction. Gradient text and curved arrows share the canvas and export renderer.
+
+`restyle.ts` extracts the first heading, body, label and non-brand photo from each slide. The editor creates a separate group using current design settings. Original groups and custom layers remain intact. Secondary photos and other custom layers are not copied into the rebuilt group. Groups over twelve slides cannot use this operation.
+
 ## Configuration and external services
 
 Credentials are loaded from an external read-only file and never sent to the client. Provider endpoints must expose compatible discovery and completion/image capabilities; text compatibility alone does not ensure image support.

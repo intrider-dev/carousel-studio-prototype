@@ -31,6 +31,8 @@ npm run test:browser
 
 `node tests/verify-production-export.mjs` verifies local sample output: document contract, PNG dimensions, ZIP CRC, and equality of archived and individual files. Generated output is not shipped. README screenshots are documentation assets, not test fixtures.
 
+`design-live-start.js`, `design-live-pictures.js`, and `design-live-finish.js` exercise a six-slide square series with real generated object illustrations. `design-reexport.js` rebuilds its design without repurchasing images; `verify-design-export.mjs` verifies all six PNGs and the ZIP. These scripts require their dedicated session and output files.
+
 ## Manual acceptance
 
 1. Create a 1080×1350 project with topic, audience, goal, and call to action.
@@ -44,6 +46,7 @@ npm run test:browser
 9. Export ZIP; verify dimensions and order. Export landscape and inspect framing and added layers.
 10. Download JSON, create another project, reopen the first from the library, and test JSON import.
 11. Repeat key controls at 390 px width and with the keyboard.
+12. Select a group, choose a visual direction under the brief, and click "Обновить дизайн". Verify that a new group appears and the original retains all its layers. The rebuilt group carries the first heading, body, label and main photo from each slide. Check the full last line of long titles, gradient controls and curved-arrow dragging. Wait for "Сохранено в этом браузере" before reloading.
 
 ## Failure cases
 
