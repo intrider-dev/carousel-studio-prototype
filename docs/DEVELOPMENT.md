@@ -22,6 +22,9 @@ npm run test:browser
 - Unit tests cover contracts, cloning, counters, geometry, branding, and template output.
 - Browser regressions cover layers, photos, fonts, persistence, recovery, cancellation, staged generation, analysis, project switching, and exports.
 - `dialog-edits.js` covers in-place edits, rewrite/redesign/retopic, operation preview, draft reload, stale and invalid results, group structure, picture replacement, undo/redo, and ZIP.
+- `interface-regression.js` creates its own project and checks focused workspaces, series navigation, control order, widths from 320 to 1600 px, modal focus, interrupted transitions, reduced motion, stable previews, and duplicate application protection.
+- `basic-navigation.js` checks the independent checklist flow, heading focus, keyboard slide navigation, narrow screens, saving, and ZIP download. `node tests/verify-basic-export.mjs` verifies its six PNG dimensions, file order, and ZIP CRC.
+- `node tests/server-smoke.mjs` verifies routes, input rejection, cross-origin blocking, and configuration-file isolation.
 - `tests/run-browser.mjs` creates and closes an isolated Playwright CLI session. Controlled responses avoid provider charges.
 - Verification output goes to ignored `output/playwright/`.
 - Older `*-flow.js` files describe previous interface states. The supported regression entry point is `npm run test:browser`.
@@ -55,6 +58,11 @@ After those runs, `dialog-review.js` uses a controlled deletion response to chec
 13. In the dialogue choose "Изменить по запросу" and one slide. Change text, color or coordinates. Review the actual operation list, reload the saved plan, apply, undo and redo. Confirm that neighboring slides and photos remain unchanged.
 14. Redesign the current group with image regeneration off, then change one slide's topic with regeneration on. Confirm that source IDs and manual elements survive and that paid image requests start only after approval.
 15. Rename/reorder/duplicate a group, add a slide with an existing picture, delete the group and undo. Check counters and limits. Edit a source after requesting a plan and verify that stale application is blocked.
+16. Switch between design, brief/brand, and review. Confirm that canvas controls disappear outside design and that switching back preserves text and selection. Open a slide from the series gallery.
+17. Select text on the canvas. Verify that text, font, and color precede coordinates and the layer list, including the Tab order. Scroll each desktop sidebar independently.
+18. Open Projects and check that the editor does not move. Use Tab, Shift+Tab, and Escape; verify focus returns to Projects. Reopen a saved project.
+19. Open and close dialogue settings repeatedly. Enable the system's reduced-motion preference. Check that keyboard actions are immediate and dragging has no transition delay. During image loading, retain the preview and its frame dimensions.
+20. At 390 px, confirm the canvas precedes project controls and slides scroll horizontally. Open the simple template, edit its text, navigate with arrows, download ZIP, reload, and return to the editor.
 
 ## Failure cases
 
@@ -68,4 +76,6 @@ After those runs, `dialog-review.js` uses a controlled deletion response to chec
 
 ## Documentation screenshots
 
-`tests/repository-screens.js` imports the local `output/playwright/production-project.json` demo and captures editor, review, and brand pages without generating pictures. Inspect images before replacing `docs/screenshots/` assets.
+`tests/repository-screens.js` imports the local `output/playwright/production-project.json` demo and captures editor, selected properties, review, brand, mobile, and dialogue screens without purchasing requests. The dialogue uses a controlled edit preview and leaves source slides unchanged. The demonstration file is needed only for screenshot capture, not the regression suite. Inspect images before replacing `docs/screenshots/` assets.
+
+The build currently warns about an editor JavaScript chunk above 500 kB. This is a known loading-cost limitation; animations do not establish a performance benchmark or commercial readiness.

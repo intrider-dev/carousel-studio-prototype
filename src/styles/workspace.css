@@ -1,0 +1,192 @@
+/* Layout and motion only. Component colors and typography use the existing theme. */
+.studio-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--background);
+}
+.studio-main {
+  padding-block: 1.5rem 2.5rem;
+}
+.studio-main [hidden] {
+  display: none !important;
+}
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr) 320px;
+  gap: 1.5rem;
+  align-items: start;
+}
+.workspace-rail,
+.workspace-inspector {
+  position: sticky;
+  top: 5.5rem;
+  max-height: calc(100dvh - 6.5rem);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+.workspace-canvas {
+  min-width: 0;
+}
+.workspace-grid.project-layout {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 1120px;
+  margin-inline: auto;
+}
+.project-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+.project-settings > :last-child {
+  grid-column: 1 / -1;
+}
+.slide-filmstrip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.slide-filmstrip button {
+  min-width: 0;
+  width: 100%;
+  white-space: normal;
+}
+.layer-list {
+  max-height: 18rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.properties-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.canvas-well {
+  background: var(--muted);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+}
+.disclosure-panel {
+  height: var(--collapsible-panel-height);
+  overflow: hidden;
+  transition:
+    height 180ms cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 140ms ease-out;
+}
+.disclosure-panel[data-starting-style],
+.disclosure-panel[data-ending-style] {
+  height: 0;
+  opacity: 0;
+}
+.disclosure-chevron {
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.studio-main [data-slot="button"],
+.studio-header [data-slot="button"],
+.studio-nav a {
+  transition-property:
+    background-color, color, border-color, box-shadow, opacity;
+  transition-duration: 120ms;
+}
+.preview-image {
+  opacity: 1;
+  transition: opacity 160ms ease-out;
+}
+@starting-style {
+  .preview-image {
+    opacity: 0;
+  }
+}
+.pending-spinner {
+  animation: pending-rotation 0.9s linear infinite;
+}
+@keyframes pending-rotation {
+  to {
+    transform: rotate(360deg);
+  }
+}
+:root[data-input-mode="keyboard"] .studio-main *,
+:root[data-input-mode="keyboard"] .studio-header * {
+  transition-duration: 0ms !important;
+}
+:root[data-input-mode="keyboard"] [data-slot="dialog-content"],
+:root[data-input-mode="keyboard"] [data-slot="dialog-overlay"] {
+  animation-duration: 0ms !important;
+}
+@media (max-width: 1399px) and (min-width: 1024px) {
+  .workspace-grid {
+    grid-template-columns: 210px minmax(0, 1fr) 300px;
+    gap: 1.25rem;
+  }
+}
+@media (max-width: 1199px) {
+  .workspace-grid {
+    grid-template-columns: 210px minmax(0, 1fr);
+  }
+  .workspace-inspector {
+    grid-column: 2;
+    position: static;
+    max-height: none;
+  }
+  .workspace-rail {
+    grid-row: 1 / span 2;
+  }
+}
+@media (max-width: 1023px) {
+  .studio-header {
+    position: static;
+  }
+  .workspace-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+  .workspace-canvas {
+    order: 0;
+  }
+  .workspace-rail {
+    order: 1;
+    grid-row: auto;
+  }
+  .workspace-inspector {
+    order: 2;
+    grid-column: auto;
+  }
+  .workspace-rail,
+  .workspace-inspector {
+    position: static;
+    max-height: none;
+  }
+  .slide-filmstrip {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-block: 0.25rem;
+    scroll-snap-type: x proximity;
+  }
+  .slide-filmstrip button {
+    flex: 0 0 180px;
+    scroll-snap-align: start;
+  }
+  .project-settings {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .canvas-well {
+    padding: 0.75rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .studio-main *,
+  .studio-header *,
+  [data-slot="alert-dialog-overlay"],
+  [data-slot="alert-dialog-content"] {
+    animation: none !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-slot="dialog-content"],
+  [data-slot="dialog-overlay"] {
+    animation: none !important;
+    transition-duration: 0ms !important;
+  }
+}

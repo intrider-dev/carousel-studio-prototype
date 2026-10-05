@@ -22,6 +22,9 @@ This repository is a local carousel editor prototype. Keep this status explicit 
 - Bind pending modifications to source IDs and canonical content revisions, including photos. Verify that save/load alone preserves a binding, while real source edits invalidate it.
 - Review actual operations before application. Preserve manual layers during redesign and validate the complete result atomically before adding a history entry.
 - Keep the external chat optional and preserve bridge origin checks.
+- Keep workspace switching independent of canvas dragging and text entry. Preserve focus, selection, and mounted controls when hiding panels.
+- Use short, explicit motion properties. Respect reduced motion and keyboard navigation; keep preview dimensions stable while loading.
+- Keep visual control order consistent with keyboard order. Hide stale review results until the current document has been checked.
 - Validate provider output and imported files. Retain bounds and size limits.
 
 ## Secrets and publication

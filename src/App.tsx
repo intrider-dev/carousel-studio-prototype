@@ -13,12 +13,15 @@ import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, A
 import { createProject, restoreProject, storageKey, roles, validateProject } from '@/lib/project'
 import type { Project } from '@/lib/project'
 import { download, slidePng, slideUrl } from '@/lib/slide'
+import { MotionRegion } from './studio/interface'
+import { useInputMode } from './studio/motion'
 
 function initialProject() {
   try { return restoreProject(localStorage.getItem(storageKey)) ?? createProject() } catch { return createProject() }
 }
 
 export default function App() {
+  useInputMode()
   const [project, setProject] = useState<Project>(initialProject)
   const [step, setStep] = useState(0)
   const [active, setActive] = useState(0)
@@ -131,13 +134,14 @@ export default function App() {
   </div>
 
   return <>
-    <header className="border-b">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
+    <header className="studio-header border-b">
+      <div className="mx-auto flex max-w-[1720px] flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <div className="flex items-center gap-3"><Layers aria-hidden="true" className="size-5" /><span className="font-semibold">Карусель</span><Badge variant="secondary">Прототип</Badge></div>
+        <nav className="studio-nav flex flex-wrap gap-1" aria-label="Разделы"><a href="/" className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Редактор</a><a href="/chat" className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Диалог</a><a href="/basic" aria-current="page" className="rounded-lg bg-secondary px-3 py-2 text-sm font-medium text-secondary-foreground">Простой шаблон</a></nav>
         <Button variant="ghost" disabled={exporting || loadingLogo} onClick={() => setResetOpen(true)}><RotateCcw aria-hidden="true" />Начать заново</Button>
       </div>
     </header>
-    <main className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6">
+    <main className="studio-main mx-auto max-w-6xl px-4 sm:px-6"><MotionRegion changeKey={`basic-${step}`} className="space-y-8">
       <div className="space-y-3">
         <h1 ref={heading} tabIndex={-1} className="text-2xl font-semibold tracking-tight sm:text-3xl">{['Новая карусель', 'Отредактируйте слайды', 'Скачать карусель'][step]}</h1>
         <p className="max-w-2xl text-muted-foreground">{[
@@ -223,7 +227,7 @@ export default function App() {
       <p role="status" className="text-sm">{status}</p>
       <Separator />
       <footer className="flex flex-wrap justify-between gap-3 text-xs text-muted-foreground"><span role="status">{saveStatus}</span><span>Чек-лист · 6 слайдов</span></footer>
-    </main>
+    </MotionRegion></main>
     <AlertDialog open={resetOpen} onOpenChange={setResetOpen}>
       <AlertDialogContent><AlertDialogHeader><AlertDialogTitle>Начать с готового примера?</AlertDialogTitle><AlertDialogDescription>Текущие тексты, название бренда и логотип будут заменены. Скачанные файлы сохранятся.</AlertDialogDescription></AlertDialogHeader>
         <AlertDialogFooter><AlertDialogCancel>Отмена</AlertDialogCancel><AlertDialogAction onClick={reset}>Заменить примером</AlertDialogAction></AlertDialogFooter>

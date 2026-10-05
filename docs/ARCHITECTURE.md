@@ -18,6 +18,8 @@ flowchart LR
 | File | Responsibility |
 | --- | --- |
 | `src/studio/Studio.tsx` | Project state, history, workspace, controls, imports, exports |
+| `src/studio/interface.tsx`, `motion.ts`, `src/styles/workspace.css` | Disclosure, pending states, input-aware motion, workspace layout |
+| `src/components/ui/dialog.tsx`, `src/studio/project-library.tsx` | Standard modal primitives and local project library |
 | `shared/design.ts` | Brief, brand, and visual directions |
 | `shared/proposal.ts` | Generation contract and visual vocabulary |
 | `shared/edit-plan.ts`, `src/studio/edits.ts` | Validated operations, scope bindings, revisions, in-place replacement |
@@ -40,6 +42,16 @@ flowchart LR
 The `carousel-studio` database separates metadata from data URLs. Assets are deduplicated by hash. Project summaries support the local library. The last healthy document is retained as a recovery copy. Generation drafts include successful pictures and history.
 
 JSON transfer includes images and uploaded fonts. Clearing browser data removes local projects; cloud backup is not provided.
+
+## Interface structure
+
+The editor separates design, brief/brand, and review. Desktop design uses a filmstrip, canvas, and inspector; narrow screens put the canvas first and use a horizontal filmstrip. Selected properties precede the layer list in both DOM and visual order. Sidebars scroll independently on wide screens.
+
+Hidden workspaces retain their mounted controls and selection. Workspace entries use opacity and a 4 px translation over 160 ms; disclosures use 180 ms height transitions, dialogs use 150 ms, and control colors use 120 ms. Keyboard-triggered navigation and reduced-motion preferences skip movement. Dragging and typing are immediate. Fixed-aspect preview frames preserve dimensions while images load.
+
+The project library traps focus, closes with Escape, and restores focus to its trigger. Applying a result uses a synchronous guard as well as the visible busy state to prevent duplicate groups. Technical review hides old findings while checking a changed document.
+
+Interface references are public pages and official workflow documentation: [Canva layers](https://www.canva.com/help/finding-and-arranging-layers/), [Gamma filmstrip](https://help.gamma.app/en/articles/11016403-how-does-the-filmstrip-in-gamma-work), [Adobe Express layers](https://helpx.adobe.com/express/web/arrange-layers-and-pages/layers.html), and [Karuselin examples](https://karuselin.ru/). These support the panel structure, filmstrip, contextual controls, and plan review. Authenticated competitor editor performance was not benchmarked.
 
 ## Generation and export
 
