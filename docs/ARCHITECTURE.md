@@ -57,6 +57,8 @@ Interface references are public pages and official workflow documentation: [Canv
 
 The default flow stops after a plan. Pictures start after review; retries skip existing pictures. Full-group analysis sends rendered slides in batches of three. Cancellation is best effort: a provider may have accepted or billed a request already.
 
+All six text actions share editorial guidance in the provider's system message. It favors plain verbs, short slide text, varied openings, and concrete actions over filler and stock phrases. Source facts, precise quotes, professional terms, and the requested author voice take priority over stylistic changes. Targeted operations change only requested text. Guidance does not run an automatic rewrite or guarantee model compliance; preview remains required.
+
 Text, pictures, and graphics remain separate layers. The shared renderer rejects overflowing or out-of-bounds text during export. Technical review is heuristic: contrast uses known underlays rather than full pixel analysis and does not validate meaning or product identity.
 
 Prompt edits use a bounded operation contract, not executable code. Each plan binds to exact group/slide IDs and a digest of canonical validated source data, including image content. Reloading an unchanged project preserves the binding; changed sources reject stale application. Operations validate atomically before one history entry is created. Locked layers require explicit unlocking, counters remain automatic, and invalid references cannot target other slides.

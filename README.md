@@ -10,6 +10,7 @@
 
 - Project size, audience, goal, scenario, and call to action.
 - Review slide text, layouts, and picture prompts before generating images.
+- Shared editorial guidance favors natural, concise language and concrete actions; it preserves source facts and the author's voice.
 - Five visual directions, six layouts, twelve built-in fonts, and uploaded fonts.
 - Brand colors, heading/body fonts, logo, and contact details.
 - Move, resize, rotate, reorder, hide, and lock text, photos, and shapes.
@@ -114,6 +115,6 @@ npm run test:browser
 
 Browser checks require the Docker service, a browser, and npm access for Playwright CLI. The regression suite uses controlled responses and does not purchase generation requests. Live scripts are separate and can incur charges.
 
-Current baseline: **35 unit tests and 142 browser assertions**. See [development and manual checks](docs/DEVELOPMENT.md), [architecture](docs/ARCHITECTURE.md), and [project instructions](AGENTS.md).
+Current baseline: **36 unit tests and 142 browser assertions**. See [development and manual checks](docs/DEVELOPMENT.md), [architecture](docs/ARCHITECTURE.md), and [project instructions](AGENTS.md).
 
 Standard shadcn/ui components are used without theme redesign. The vendored stylesheet retains its [MIT notice](src/styles/vendor/shadcn.LICENSE.md); dependency and font licenses remain with their packages.

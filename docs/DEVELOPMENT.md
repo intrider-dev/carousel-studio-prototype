@@ -20,6 +20,7 @@ npm run test:browser
 ## Automated coverage
 
 - Unit tests cover contracts, cloning, counters, geometry, branding, and template output.
+- `editorial-prompt.test.ts` verifies shared system guidance across six text actions, unchanged source text, and preserved structured response contracts.
 - Browser regressions cover layers, photos, fonts, persistence, recovery, cancellation, staged generation, analysis, project switching, and exports.
 - `dialog-edits.js` covers in-place edits, rewrite/redesign/retopic, operation preview, draft reload, stale and invalid results, group structure, picture replacement, undo/redo, and ZIP.
 - `interface-regression.js` creates its own project and checks focused workspaces, series navigation, control order, widths from 320 to 1600 px, modal focus, interrupted transitions, reduced motion, stable previews, and duplicate application protection.
@@ -40,6 +41,8 @@ npm run test:browser
 `dialog-live-start.js` / `dialog-live-finish.js`, `dialog-redesign-start.js` / `dialog-redesign-finish.js`, and `dialog-photo-start.js` / `dialog-photo-finish.js` exercise real-model edits on an existing six-slide sample. They incur provider charges. `verify-dialog-export.mjs` compares the before/after JSON and ZIP, including unchanged surrounding slides, identities and pictures. Sample input files must already exist in ignored output.
 
 After those runs, `dialog-review.js` uses a controlled deletion response to check the actual-operation disclosure and the 390 px dialogue layout without applying the deletion or purchasing pictures.
+
+`copy-live-start.js` and `copy-live-review.js` create a four-slide desk-organization plan through the available free text router, save its raw JSON, inspect text limits and common stock phrases, and capture the rendered preview. They require a fresh dedicated session. Pictures remain pending approval and are not purchased by these scripts. Text quality also requires reading every slide; phrase matching alone cannot establish natural language quality. Other selected models and image requests **can incur charges**.
 
 ## Manual acceptance
 
