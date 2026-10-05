@@ -6,6 +6,8 @@
 
 ![Carousel editor with a generated four-slide series](docs/screenshots/editor.png)
 
+*Editor: a four-slide series with separate text, picture, and graphic layers.*
+
 ## Features
 
 - Project size, audience, goal, scenario, and call to action.
@@ -31,37 +33,37 @@
 
 Each example was generated through the app's connected text and image models, then exported with the editor's PNG renderer at **1080×1350**. The brief and copy stay the same. Direction examples request their recommended composition; picture styles share one poster layout for comparison. Click an image for the full-size export.
 
-### Project directions
+### Project styling: layouts and typography
 
-The topic-based option shows the choices made for this brief; it is not a fixed palette.
+Five treatments of the same brief, with different layouts, palettes, and fonts. Topic-based styling shows the choices made for this example rather than a fixed palette.
 
 <table>
 <tr>
-<td align="center"><strong>Topic-based</strong><br><a href="docs/examples/direction-auto.png"><img src="docs/examples/direction-auto.png" alt="Topic-based direction: desk lamp slide" width="260" height="325" /></a></td>
-<td align="center"><strong>Magazine</strong><br><a href="docs/examples/direction-editorial.png"><img src="docs/examples/direction-editorial.png" alt="Magazine direction: serif typography and warm paper palette" width="260" height="325" /></a></td>
-<td align="center"><strong>Bold</strong><br><a href="docs/examples/direction-bold.png"><img src="docs/examples/direction-bold.png" alt="Bold direction: dark palette and dimensional lamp illustration" width="260" height="325" /></a></td>
+<td align="center"><strong>Topic-based</strong><br><a href="docs/examples/direction-auto.png"><img src="docs/examples/direction-auto.png" alt="Topic-based direction: desk lamp slide" width="260" height="325" /></a><br><em>Poster with a neutral palette.</em></td>
+<td align="center"><strong>Magazine</strong><br><a href="docs/examples/direction-editorial.png"><img src="docs/examples/direction-editorial.png" alt="Magazine direction: serif typography and warm paper palette" width="260" height="325" /></a><br><em>Serif headline above the picture.</em></td>
+<td align="center"><strong>Bold</strong><br><a href="docs/examples/direction-bold.png"><img src="docs/examples/direction-bold.png" alt="Bold direction: dark palette and dimensional lamp illustration" width="260" height="325" /></a><br><em>Colored cards and a 3D object.</em></td>
 </tr>
 <tr>
-<td align="center"><strong>Clean</strong><br><a href="docs/examples/direction-minimal.png"><img src="docs/examples/direction-minimal.png" alt="Clean direction: restrained green accents and clear hierarchy" width="260" height="325" /></a></td>
-<td align="center"><strong>Premium</strong><br><a href="docs/examples/direction-luxe.png"><img src="docs/examples/direction-luxe.png" alt="Premium direction: deep green and elegant serif typography" width="260" height="325" /></a></td>
+<td align="center"><strong>Clean</strong><br><a href="docs/examples/direction-minimal.png"><img src="docs/examples/direction-minimal.png" alt="Clean direction: restrained green accents and clear hierarchy" width="260" height="325" /></a><br><em>Two columns and a simple grid.</em></td>
+<td align="center"><strong>Premium</strong><br><a href="docs/examples/direction-luxe.png"><img src="docs/examples/direction-luxe.png" alt="Premium direction: deep green and elegant serif typography" width="260" height="325" /></a><br><em>Large serif type on a dark background.</em></td>
 <td></td>
 </tr>
 </table>
 
-### Picture styles
+### Picture techniques: one subject, six styles
 
-These six examples use the same layout, typeface, and palette. The selected technique determines the image: sculptural 3D, real photography, flat drawing, cutout collage, cinematic photography, or paper construction. The lamp is a fictional subject, not a product-identity test.
+Six image techniques in the same poster layout, typeface, and palette. Only the picture style changes. The lamp is a fictional subject, not a product-identity test.
 
 <table>
 <tr>
-<td align="center"><strong>3D objects</strong><br><a href="docs/examples/picture-object.png"><img src="docs/examples/picture-object.png" alt="Dimensional desk lamp artwork" width="260" height="325" /></a></td>
-<td align="center"><strong>Product photography</strong><br><a href="docs/examples/picture-photo.png"><img src="docs/examples/picture-photo.png" alt="Photographic desk lamp artwork" width="260" height="325" /></a></td>
-<td align="center"><strong>Illustration</strong><br><a href="docs/examples/picture-illustration.png"><img src="docs/examples/picture-illustration.png" alt="Illustrated desk lamp artwork" width="260" height="325" /></a></td>
+<td align="center"><strong>3D objects</strong><br><a href="docs/examples/picture-object.png"><img src="docs/examples/picture-object.png" alt="Dimensional desk lamp artwork" width="260" height="325" /></a><br><em>Sculptural shapes and matte materials.</em></td>
+<td align="center"><strong>Product photography</strong><br><a href="docs/examples/picture-photo.png"><img src="docs/examples/picture-photo.png" alt="Photographic desk lamp artwork" width="260" height="325" /></a><br><em>Photographic scene with a cup and notebook.</em></td>
+<td align="center"><strong>Illustration</strong><br><a href="docs/examples/picture-illustration.png"><img src="docs/examples/picture-illustration.png" alt="Illustrated desk lamp artwork" width="260" height="325" /></a><br><em>Flat drawing with a bold outline.</em></td>
 </tr>
 <tr>
-<td align="center"><strong>Editorial collage</strong><br><a href="docs/examples/picture-collage.png"><img src="docs/examples/picture-collage.png" alt="Desk lamp in an editorial collage" width="260" height="325" /></a></td>
-<td align="center"><strong>Cinematic photography</strong><br><a href="docs/examples/picture-cinematic.png"><img src="docs/examples/picture-cinematic.png" alt="Desk lamp with cinematic lighting" width="260" height="325" /></a></td>
-<td align="center"><strong>Paper and textures</strong><br><a href="docs/examples/picture-paper.png"><img src="docs/examples/picture-paper.png" alt="Desk lamp with tactile paper textures" width="260" height="325" /></a></td>
+<td align="center"><strong>Editorial collage</strong><br><a href="docs/examples/picture-collage.png"><img src="docs/examples/picture-collage.png" alt="Desk lamp in an editorial collage" width="260" height="325" /></a><br><em>Cutout fragments and torn edges.</em></td>
+<td align="center"><strong>Cinematic photography</strong><br><a href="docs/examples/picture-cinematic.png"><img src="docs/examples/picture-cinematic.png" alt="Desk lamp with cinematic lighting" width="260" height="325" /></a><br><em>Room depth, side light, and film grain.</em></td>
+<td align="center"><strong>Paper and textures</strong><br><a href="docs/examples/picture-paper.png"><img src="docs/examples/picture-paper.png" alt="Desk lamp with tactile paper textures" width="260" height="325" /></a><br><em>Paper sculpture with a textured surface.</em></td>
 </tr>
 </table>
 
@@ -69,19 +71,37 @@ These six examples use the same layout, typeface, and palette. The selected tech
 
 The interface currently uses Russian. FORM is a fictional demonstration collection.
 
+### Setup and editing
+
 ![Brand and brief settings](docs/screenshots/brand.png)
+
+*Project settings: topic, audience, palette, and brand fonts.*
 
 ![Selected layer properties](docs/screenshots/inspector.png)
 
+*Selected headline: text, font, color, and geometry controls.*
+
+### Review and export
+
 ![Technical review](docs/screenshots/review.png)
+
+*Four-slide overview with technical review results.*
 
 <img src="docs/screenshots/slide.png" alt="Exported demonstration slide" width="360" />
 
+*Exported "Quiet ritual" slide, PNG at 1080×1350.*
+
+### Prompt edits and mobile view
+
 ![Preview changes to an existing slide](docs/screenshots/dialog.png)
+
+*Headline replacement preview before applying the change.*
+
+The dialogue screenshot shows a controlled preview response. It demonstrates the interface and does not establish live model quality.
 
 <img src="docs/screenshots/mobile.png" alt="Mobile editor with the canvas before project controls" width="390" />
 
-The dialogue screenshot shows a controlled preview response. It demonstrates the interface and does not establish live model quality.
+*Phone view: the canvas and selected text layer.*
 
 ## Run with Docker
 

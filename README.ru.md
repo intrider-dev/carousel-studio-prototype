@@ -6,6 +6,8 @@
 
 ![Редактор с серией из четырёх слайдов](docs/screenshots/editor.png)
 
+*Редактор: серия из четырёх слайдов с отдельными слоями текста, изображений и фигур.*
+
 ## Возможности
 
 - Размер, аудитория, цель, сценарий и призыв к действию.
@@ -31,37 +33,37 @@
 
 Каждый пример создан через подключённые к площадке модели текста и изображений и экспортирован редактором в PNG **1080×1350**. Бриф и текст одинаковые. Для направлений оформления в запросе указаны рекомендованные композиции; стили изображений сравниваются в одном постере. Нажмите на изображение, чтобы открыть полный размер.
 
-### Оформление проекта
+### Оформление: композиция и шрифты
 
-«По теме» показывает подбор для этого брифа, а не фиксированную палитру.
+Пять вариантов одного брифа: меняются композиция, палитра и шрифты. «По теме» показывает подбор для этого примера, а не фиксированную палитру.
 
 <table>
 <tr>
-<td align="center"><strong>По теме</strong><br><a href="docs/examples/direction-auto.png"><img src="docs/examples/direction-auto.png" alt="Оформление по теме: слайд с настольной лампой" width="260" height="325" /></a></td>
-<td align="center"><strong>Журнальный</strong><br><a href="docs/examples/direction-editorial.png"><img src="docs/examples/direction-editorial.png" alt="Журнальный стиль: антиква и тёплая бумажная палитра" width="260" height="325" /></a></td>
-<td align="center"><strong>Смелый</strong><br><a href="docs/examples/direction-bold.png"><img src="docs/examples/direction-bold.png" alt="Смелый стиль: тёмная палитра и объёмная лампа" width="260" height="325" /></a></td>
+<td align="center"><strong>По теме</strong><br><a href="docs/examples/direction-auto.png"><img src="docs/examples/direction-auto.png" alt="Оформление по теме: слайд с настольной лампой" width="260" height="325" /></a><br><em>Постер, нейтральная палитра.</em></td>
+<td align="center"><strong>Журнальный</strong><br><a href="docs/examples/direction-editorial.png"><img src="docs/examples/direction-editorial.png" alt="Журнальный стиль: антиква и тёплая бумажная палитра" width="260" height="325" /></a><br><em>Антиква, фото под текстом.</em></td>
+<td align="center"><strong>Смелый</strong><br><a href="docs/examples/direction-bold.png"><img src="docs/examples/direction-bold.png" alt="Смелый стиль: тёмная палитра и объёмная лампа" width="260" height="325" /></a><br><em>Цветные карточки и объём.</em></td>
 </tr>
 <tr>
-<td align="center"><strong>Чистый</strong><br><a href="docs/examples/direction-minimal.png"><img src="docs/examples/direction-minimal.png" alt="Чистый стиль: сдержанные зелёные акценты и ясная иерархия" width="260" height="325" /></a></td>
-<td align="center"><strong>Премиальный</strong><br><a href="docs/examples/direction-luxe.png"><img src="docs/examples/direction-luxe.png" alt="Премиальный стиль: глубокий зелёный цвет и элегантная антиква" width="260" height="325" /></a></td>
+<td align="center"><strong>Чистый</strong><br><a href="docs/examples/direction-minimal.png"><img src="docs/examples/direction-minimal.png" alt="Чистый стиль: сдержанные зелёные акценты и ясная иерархия" width="260" height="325" /></a><br><em>Две колонки, простая сетка.</em></td>
+<td align="center"><strong>Премиальный</strong><br><a href="docs/examples/direction-luxe.png"><img src="docs/examples/direction-luxe.png" alt="Премиальный стиль: глубокий зелёный цвет и элегантная антиква" width="260" height="325" /></a><br><em>Крупная антиква, тёмный фон.</em></td>
 <td></td>
 </tr>
 </table>
 
-### Стиль изображений
+### Техники изображения: один сюжет, шесть стилей
 
-В этих шести примерах одинаковые композиция, шрифт и палитра. Выбранная техника определяет изображение: объёмная графика, предметное фото, плоский рисунок, коллаж, кинематографическое фото или бумажная конструкция. Лампа - вымышленный предмет, а не проверка точного воспроизведения товара.
+Шесть техник в одном постере с одинаковыми шрифтом и палитрой. Меняется только стиль изображения. Лампа - вымышленный предмет, а не проверка точного воспроизведения товара.
 
 <table>
 <tr>
-<td align="center"><strong>Объёмные 3D-объекты</strong><br><a href="docs/examples/picture-object.png"><img src="docs/examples/picture-object.png" alt="Объёмная иллюстрация настольной лампы" width="260" height="325" /></a></td>
-<td align="center"><strong>Предметные фотографии</strong><br><a href="docs/examples/picture-photo.png"><img src="docs/examples/picture-photo.png" alt="Предметная фотография настольной лампы" width="260" height="325" /></a></td>
-<td align="center"><strong>Иллюстрации</strong><br><a href="docs/examples/picture-illustration.png"><img src="docs/examples/picture-illustration.png" alt="Рисованная иллюстрация настольной лампы" width="260" height="325" /></a></td>
+<td align="center"><strong>Объёмные 3D-объекты</strong><br><a href="docs/examples/picture-object.png"><img src="docs/examples/picture-object.png" alt="Объёмная иллюстрация настольной лампы" width="260" height="325" /></a><br><em>Скульптурные формы и матовые материалы.</em></td>
+<td align="center"><strong>Предметные фотографии</strong><br><a href="docs/examples/picture-photo.png"><img src="docs/examples/picture-photo.png" alt="Предметная фотография настольной лампы" width="260" height="325" /></a><br><em>Фотографическая сцена с чашкой и блокнотом.</em></td>
+<td align="center"><strong>Иллюстрации</strong><br><a href="docs/examples/picture-illustration.png"><img src="docs/examples/picture-illustration.png" alt="Рисованная иллюстрация настольной лампы" width="260" height="325" /></a><br><em>Плоский рисунок с чётким контуром.</em></td>
 </tr>
 <tr>
-<td align="center"><strong>Редакционный коллаж</strong><br><a href="docs/examples/picture-collage.png"><img src="docs/examples/picture-collage.png" alt="Настольная лампа в редакционном коллаже" width="260" height="325" /></a></td>
-<td align="center"><strong>Кинематографическая фотография</strong><br><a href="docs/examples/picture-cinematic.png"><img src="docs/examples/picture-cinematic.png" alt="Настольная лампа с кинематографическим освещением" width="260" height="325" /></a></td>
-<td align="center"><strong>Бумага и фактуры</strong><br><a href="docs/examples/picture-paper.png"><img src="docs/examples/picture-paper.png" alt="Настольная лампа с бумажными фактурами" width="260" height="325" /></a></td>
+<td align="center"><strong>Редакционный коллаж</strong><br><a href="docs/examples/picture-collage.png"><img src="docs/examples/picture-collage.png" alt="Настольная лампа в редакционном коллаже" width="260" height="325" /></a><br><em>Вырезанные фрагменты и рваные края.</em></td>
+<td align="center"><strong>Кинематографическая фотография</strong><br><a href="docs/examples/picture-cinematic.png"><img src="docs/examples/picture-cinematic.png" alt="Настольная лампа с кинематографическим освещением" width="260" height="325" /></a><br><em>Глубина комнаты, боковой свет и зерно.</em></td>
+<td align="center"><strong>Бумага и фактуры</strong><br><a href="docs/examples/picture-paper.png"><img src="docs/examples/picture-paper.png" alt="Настольная лампа с бумажными фактурами" width="260" height="325" /></a><br><em>Бумажная скульптура с заметной фактурой.</em></td>
 </tr>
 </table>
 
@@ -69,19 +71,37 @@
 
 Интерфейс на русском. FORM - вымышленная коллекция для демонстрации.
 
+### Настройка и редактирование
+
 ![Бриф и бренд](docs/screenshots/brand.png)
+
+*Настройки проекта: тема, аудитория, палитра и шрифты бренда.*
 
 ![Свойства выбранного слоя](docs/screenshots/inspector.png)
 
+*Свойства выбранного заголовка: текст, шрифт, цвет и геометрия.*
+
+### Проверка и экспорт
+
 ![Техническая проверка](docs/screenshots/review.png)
+
+*Обзор четырёх слайдов и результаты технической проверки.*
 
 <img src="docs/screenshots/slide.png" alt="Пример готового слайда" width="360" />
 
+*Экспортированный слайд «Тихий ритуал», PNG 1080×1350.*
+
+### Правки по запросу и мобильный вид
+
 ![Просмотр правок текущего слайда](docs/screenshots/dialog.png)
+
+*Предпросмотр замены заголовка до применения правки.*
+
+Скриншот диалога показывает предпросмотр с подменённым ответом. Это демонстрация интерфейса, а не подтверждение качества реальной генерации.
 
 <img src="docs/screenshots/mobile.png" alt="Мобильный редактор: холст перед настройками проекта" width="390" />
 
-Скриншот диалога показывает предпросмотр с подменённым ответом. Это демонстрация интерфейса, а не подтверждение качества реальной генерации.
+*Редактор на телефоне: холст и выбранный текстовый слой.*
 
 ## Запуск через Docker
 
