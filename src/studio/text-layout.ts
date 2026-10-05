@@ -1,6 +1,7 @@
 import Konva from 'konva'
-import type { Element, Group } from './model'
+import type { Element, Group,Doc } from './model'
 import { drawingAttrs } from './drawing'
+import { loadSlideFonts } from './fonts'
 
 export function textFits(e: Element, defaultFont: string) {
   if (e.type !== 'text') return true
@@ -19,4 +20,9 @@ export function fitText(e: Element, font: string): Element {
 }
 export function fitGroup(group: Group, font: string): Group {
   return { ...group, slides: group.slides.map(s => ({ ...s, elements: s.elements.map(e => fitText(e, font)) })) }
+}
+export async function fitEditedDocument(before:Doc,after:Doc):Promise<Doc> {
+  await loadSlideFonts(after,after.groups.flatMap(g=>g.slides))
+  const previous=new Map(before.groups.flatMap(g=>g.slides.flatMap(s=>s.elements.map(e=>[e.id,e] as const))))
+  return {...after,groups:after.groups.map(g=>({...g,slides:g.slides.map(s=>({...s,elements:s.elements.map(e=>e.type==='text'&&JSON.stringify(previous.get(e.id))!==JSON.stringify(e)?fitText(e,after.defaultFont):e)}))}))}
 }

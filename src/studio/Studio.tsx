@@ -15,11 +15,14 @@ import { loadDoc, saveDoc, imageFile, registerFonts, validatePhotos, readLocal, 
 import { SlideCanvas, renderSlide } from './canvas'
 import { Connector } from './connector'
 import { download } from '@/lib/slide'
-import { fitGroup, fitText, textFits } from './text-layout'
+import { fitGroup, fitText, textFits,fitEditedDocument } from './text-layout'
 import { shapeElement } from './layouts'
 import { SlideThumbnail } from './thumbnail'
 import { loadSlideFonts } from './fonts'
 import { groupProposal } from './restyle'
+import { applyEditPlan,applyContentProposal,assertTarget,editError } from './edits'
+import type { EditTarget } from './edits'
+import type { EditPlan } from '../../shared/edit-plan'
 import { BriefControls, BrandControls, DirectionControls } from './project-controls'
 import { ProjectLibrary } from './project-library'
 import { QualityPanel } from './quality-panel'
@@ -46,6 +49,8 @@ function NumberField({ label, value, onChange, min = 0, max = 4096 }: { label: s
 export default function Studio() {
   const [state, dispatch] = useReducer(reducer, { doc: null, past: [], future: [] })
   const doc = state.doc
+  const currentDoc=useRef(doc)
+  useEffect(()=>{currentDoc.current=doc},[doc])
   const [settings, setSettings] = useState(defaults)
   const [loaded, setLoaded] = useState(false)
   const [groupId, setGroupId] = useState('')
@@ -114,10 +119,15 @@ export default function Studio() {
     edit(d => ({ ...d, groups: [...d.groups, next] })); setGroupId(next.id); setSlideId(next.slides[0].id); setSelected(''); setError('')
     return true
   }
-  function applyProposal(proposal: Proposal, target: 'slide' | 'group' | 'rewrite') {
-    if(target==='rewrite') {
-      if(!group || proposal.slides.length!==group.slides.length){setError('Для замены текста выберите контекст всей группы.');return false}
-      edit(d=>({...d,groups:d.groups.map(g=>g.id===group.id?{...g,slides:g.slides.map((s,i)=>({...s,title:proposal.slides[i].title,elements:s.elements.map(e=>e.type==='text'&&(e.role==='heading'||e.role==='body')?fitText({...e,text:e.role==='heading'?proposal.slides[i].title:proposal.slides[i].body},d.defaultFont):e)}))}:g)}));return true
+  async function applyChanges(plan:EditPlan,target:EditTarget) {
+    if(!doc)return false
+    setBusy(true)
+    try {await assertTarget(doc,target);const next=await fitEditedDocument(doc,applyEditPlan(doc,target,plan));if(currentDoc.current!==doc)throw new Error('Проект изменился. Повторите применение с текущим контекстом.');edit(()=>next);setGroupId(target.groupId);setSelected('');setError('');return true} catch(e){setError(editError(e));return false}finally{setBusy(false)}
+  }
+  async function applyProposal(proposal: Proposal, target: 'slide' | 'group' | 'rewrite' | 'replace',binding?:EditTarget) {
+    if(target==='rewrite'||target==='replace') {
+      if(!doc||!binding){setError('Не найден исходный контекст. Отправьте новый запрос.');return false}
+      try{await assertTarget(doc,binding);const next=await fitEditedDocument(doc,applyContentProposal(doc,binding,proposal,target==='rewrite'?'rewrite':'replace'));if(currentDoc.current!==doc)throw new Error('Проект изменился. Повторите применение с текущим контекстом.');edit(()=>next);setGroupId(binding.groupId);setSelected('');setError('');return true}catch(e){setError(editError(e));return false}
     }
     if (target === 'group') return addGroup(proposal)
     if (!doc || !group || group.slides.length >= 20) { setError('В группе уже 20 слайдов. Выберите создание новой группы.'); return false }
@@ -126,16 +136,16 @@ export default function Studio() {
     edit(d => ({ ...d, groups: d.groups.map(g => g.id === group.id ? { ...g, slides: [...g.slides, next] } : g) }))
     setSlideId(next.id); setSelected(''); setError(''); return true
   }
-  async function addPhoto(src: string, replace = false) {
+  async function addPhoto(src: string, replace = false,layerId?:string) {
     if (!doc || !slide) return false
-    if(replace){const existing=slide.elements.find(e=>e.type==='image'&&e.id===selected)??slide.elements.find(e=>e.type==='image');if(!existing){setError('На слайде нет картинки для замены.');return false}try{const image=new Image();image.src=src;await image.decode()}catch{setError('Не удалось открыть фото.');return false}updateSlide(s=>({...s,elements:s.elements.map(e=>e.id===existing.id?{...existing,src}:e)}));return true}
+    if(replace){const existing=slide.elements.find(e=>e.type==='image'&&e.id===(layerId||selected))??slide.elements.find(e=>e.type==='image'&&e.role!=='brand');if(!existing){setError('На слайде нет картинки для замены.');return false}if(existing.locked){setError('Картинка закреплена. Сначала разрешите её изменение.');return false}try{const image=new Image();image.src=src;await image.decode()}catch{setError('Не удалось открыть фото.');return false}if(currentDoc.current!==doc){setError('Проект изменился. Повторите применение изображения.');return false}updateSlide(s=>({...s,elements:s.elements.map(e=>e.id===existing.id?{...existing,src}:e)}));return true}
     if (slide.elements.length >= 40) { setError('Не больше 40 слоёв на слайде.'); return false }
     const target = slide.id
     const img = new Image(); img.src = src
     try {
       await img.decode()
       const width = Math.min(doc.width * .65, doc.height * .65 * img.width / img.height)
-      const photo: Element = { id: uid(), type: 'image', role:'artwork', name: 'Фото', src, x: doc.width * .1, y: doc.height * .2, width:Math.max(1,width), height: Math.max(1,width * img.height / img.width), rotation: 0, locked: false, visible: true }
+      const photo: Element = { id: uid(), type: 'image', origin:'manual', role:'artwork', name: 'Фото', src, x: doc.width * .1, y: doc.height * .2, width:Math.max(1,width), height: Math.max(1,width * img.height / img.width), rotation: 0, locked: false, visible: true }
       edit(d => ({ ...d, groups: d.groups.map(g => ({ ...g, slides: g.slides.map(s => s.id === target ? { ...s, elements: [...s.elements, photo].slice(0, 40) } : s) })) }))
       setSelected(photo.id); setError('');return true
     } catch { setError('Не удалось открыть фото.');return false }
@@ -193,7 +203,7 @@ export default function Studio() {
 <div className="space-y-1"><Label htmlFor="export-size" className="sr-only">Формат экспорта</Label><NativeSelect id="export-size" value={exportSize} disabled={busy} onChange={e=>setExportSize(e.target.value as keyof typeof exportSizes)}>{Object.entries(exportSizes).map(([key,value])=><NativeSelectOption key={key} value={key}>{value.label}</NativeSelectOption>)}</NativeSelect></div><Button variant="outline" disabled={busy} onClick={() => exportSlides(false)}>PNG</Button><Button disabled={busy} onClick={() => exportSlides(true)}><Download />{busy ? 'Подготовка…' : 'ZIP группы'}</Button><Button variant="outline" disabled={busy || chatBusy} onClick={() => setReset(true)}>Новый проект</Button>
       </div></div>
       {exportSize!=='project'&&<p className="text-sm text-muted-foreground">Проверьте кадрирование в новом размере.</p>}
-      {page === '/chat' ? <div className="space-y-4"><div className="space-y-4"><Connector wide doc={doc} group={group} slideId={slide.id} sourceText={incoming} onProposal={(p, target) => { const applied = applyProposal(p, target); if (applied) { setIncoming(''); navigate('/') } return applied }} onImage={addPhoto} onBusy={setChatBusy} /><details className="rounded-lg border p-4"><summary className="cursor-pointer font-medium">Чат</summary><div className="space-y-4 pt-4"><Card><CardContent className="space-y-3 pt-4"><div className="flex flex-wrap gap-2"><Button disabled={!chatReady} onClick={() => { const text=JSON.stringify(contextFor(doc, group, slide.id));if(text.length>3500){setError('Контекст слишком велик для обычного чата. Используйте «Создание слайдов».');return}iframe.current?.contentWindow?.postMessage({ type: 'studio:context', text: `Помоги улучшить этот слайд. Контекст: ${text}` }, location.origin) }}>Передать текущий слайд</Button><Button variant="outline" disabled={!chatReady} onClick={() => { const text = JSON.stringify(contextFor(doc, group)); if (text.length > 3500) { setError('Группа слишком велика для обычного чата. Используйте «Создание слайдов» в редакторе.'); return } iframe.current?.contentWindow?.postMessage({ type: 'studio:context', text: `Проанализируй группу слайдов и предложи улучшения: ${text}` }, location.origin) }}>Передать группу</Button></div>
+      {page === '/chat' ? <div className="space-y-4"><div className="space-y-4"><Connector wide doc={doc} group={group} slideId={slide.id} sourceText={incoming} onProposal={async(p, target,binding) => { const applied = await applyProposal(p, target,binding); if (applied) { setIncoming(''); navigate('/') } return applied }} onImage={addPhoto} selectedLayerId={selected} onEdit={applyChanges} onBusy={setChatBusy} /><details className="rounded-lg border p-4"><summary className="cursor-pointer font-medium">Чат</summary><div className="space-y-4 pt-4"><Card><CardContent className="space-y-3 pt-4"><div className="flex flex-wrap gap-2"><Button disabled={!chatReady} onClick={() => { const text=JSON.stringify(contextFor(doc, group, slide.id));if(text.length>3500){setError('Контекст слишком велик для обычного чата. Используйте «Создание слайдов».');return}iframe.current?.contentWindow?.postMessage({ type: 'studio:context', text: `Помоги улучшить этот слайд. Контекст: ${text}` }, location.origin) }}>Передать текущий слайд</Button><Button variant="outline" disabled={!chatReady} onClick={() => { const text = JSON.stringify(contextFor(doc, group)); if (text.length > 3500) { setError('Группа слишком велика для обычного чата. Используйте «Создание слайдов» в редакторе.'); return } iframe.current?.contentWindow?.postMessage({ type: 'studio:context', text: `Проанализируй группу слайдов и предложи улучшения: ${text}` }, location.origin) }}>Передать группу</Button></div>
         {incoming && <div className="space-y-2"><Label htmlFor="incoming">Текст из чата</Label><Textarea id="incoming" rows={8} className="max-h-64 overflow-y-auto" maxLength={16000} disabled={chatBusy} value={incoming} onChange={e => setIncoming(e.target.value)} /><Button variant="outline" disabled={chatBusy} onClick={() => setIncoming('')}>Убрать текст</Button></div>}
       </CardContent></Card><iframe ref={iframe} title="Чат исходного проекта" src="/legacy/" className="h-[78vh] w-full rounded-lg border" onLoad={() => iframe.current?.contentWindow?.postMessage({ type: 'studio:hello' }, location.origin)} /></div></details></div></div> : <>
       <div className="flex flex-wrap gap-2" aria-label="Режим рабочего пространства">{[['design','Дизайн'],['project','Бриф и бренд'],['quality','Проверка серии']].map(([key,label])=><Button key={key} variant={workspace===key?'default':'outline'} aria-pressed={workspace===key} onClick={()=>setWorkspace(key)}>{label}</Button>)}</div>
@@ -217,7 +227,7 @@ export default function Studio() {
         </CardContent></Card></div>
         <div hidden={workspace!=='project'} className="space-y-4"><Card><CardHeader><CardTitle>Тема и стиль</CardTitle></CardHeader><CardContent className="space-y-3"><Label htmlFor="edit-topic">Тема</Label><Textarea id="edit-topic" value={doc.topic} maxLength={800} onChange={e => edit(d => ({ ...d, topic: e.target.value }))} /><Label htmlFor="edit-style">Стиль</Label><Textarea id="edit-style" value={doc.style} maxLength={800} onChange={e => edit(d => ({ ...d, style: e.target.value }))} /><p className="text-xs text-muted-foreground">Изменения темы применяются к следующим запросам. Для новой версии серии выберите «Сменить тематику» в диалоге.</p><Label htmlFor="default-font">Шрифт по умолчанию</Label><NativeSelect id="default-font" value={doc.defaultFont} onChange={e => edit(d => ({ ...d, defaultFont: e.target.value }))}>{fontChoices.map(f => <NativeSelectOption key={f}>{f}</NativeSelectOption>)}</NativeSelect><Label htmlFor="font-upload">Добавить шрифт</Label><Input id="font-upload" type="file" accept=".ttf,.otf,.woff,.woff2" disabled={busy} onChange={e => { void fontUpload(e.target.files?.[0]); e.target.value = '' }} /></CardContent></Card><Card><CardHeader><CardTitle>Бриф серии</CardTitle></CardHeader><CardContent><BriefControls value={doc} onChange={value=>edit(d=>({...d,...value}))}/></CardContent></Card><Card><CardHeader><CardTitle>Оформление и бренд</CardTitle></CardHeader><CardContent className="space-y-6"><DirectionControls value={doc} onChange={value=>edit(d=>({...d,...value}))}/><BrandControls value={doc} extraFonts={doc.fonts.map(f=>f.family)} onChange={value=>edit(d=>({...d,...value}))}/></CardContent></Card></div></section>
         <aside className="min-w-0 space-y-4 xl:sticky xl:top-4 xl:max-h-[calc(100vh-2rem)] xl:overflow-y-auto"><div className="flex gap-2"><Button variant={panel === 'properties' ? 'default' : 'outline'} onClick={() => setPanel('properties')}>Свойства</Button><Button variant={panel === 'chat' ? 'default' : 'outline'} onClick={() => setPanel('chat')}>Создание слайдов</Button></div>
-          <div hidden={panel !== 'chat'}><Connector doc={doc} group={group} slideId={slide.id} onProposal={applyProposal} onImage={addPhoto} onBusy={setChatBusy} /></div>
+          <div hidden={panel !== 'chat'}><Connector doc={doc} group={group} slideId={slide.id} onProposal={applyProposal} onImage={addPhoto} selectedLayerId={selected} onEdit={applyChanges} onBusy={setChatBusy} /></div>
           <div hidden={panel !== 'properties'} className="space-y-4"><Card><CardHeader><CardTitle>Слои</CardTitle><CardDescription>Верхний слой перекрывает остальные.</CardDescription></CardHeader><CardContent className="space-y-2">{[...slide.elements].reverse().map(e => <Button key={e.id} variant={selected === e.id ? 'default' : 'outline'} className="w-full" onClick={() => setSelected(e.id)}><span className="truncate">{e.name}{e.locked ? ' · закреплён' : ''}{!e.visible ? ' · скрыт' : ''}</span></Button>)}<Label htmlFor="slide-background">Фон слайда</Label><Input id="slide-background" type="color" value={slide.background} onChange={e => updateSlide(s => ({ ...s, background: e.target.value }))} /></CardContent></Card>
           {element && <Card><CardHeader><CardTitle>Свойства слоя</CardTitle></CardHeader><CardContent className="space-y-4"><Label htmlFor="layer-name">Название слоя</Label><Input id="layer-name" maxLength={100} value={element.name} onChange={e => updateElement({ ...element, name: e.target.value })} />
             <div className="flex flex-wrap gap-2"><Button variant="outline" onClick={() => updateElement({ ...element, locked: !element.locked })}>{element.locked ? 'Открепить' : 'Закрепить'}</Button><Button variant="outline" onClick={() => updateElement({ ...element, visible: !element.visible })}>{element.visible ? 'Скрыть' : 'Показать'}</Button><Button variant="outline" aria-label="Удалить слой" onClick={() => { updateSlide(s => ({ ...s, elements: s.elements.filter(e => e.id !== element.id) })); setSelected('') }}><Trash2 /></Button></div>

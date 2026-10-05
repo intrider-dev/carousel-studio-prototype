@@ -14,6 +14,7 @@ try {
   run(['run-code','--filename','tests/editor-interactions.js'])
   run(['run-code','--filename','tests/production-workflow.js'])
   run(['run-code','--filename','tests/design-regression.js'])
+  run(['run-code','--filename','tests/dialog-edits.js'])
 } catch(error) {
   run(['snapshot'])
   run(['screenshot','--filename','output/playwright/check-failure.png'])

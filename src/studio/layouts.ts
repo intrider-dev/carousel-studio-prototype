@@ -15,7 +15,7 @@ export function contrastColor(background: string) {
   return contrastRatio('#171717',background)>=4.5?'#171717':'#000000'
 }
 export function shapeElement(doc: Settings, kind: Extract<Element, {type:'shape'}>['kind'] = 'rect'): Extract<Element, {type:'shape'}> {
-  return { id: uid(), name: 'Фигура', role: 'decoration', type: 'shape', kind, fill: '#7047eb', x: doc.width * .15, y: doc.height * .2, width: doc.width * .3, height: doc.height * .2, rotation: 0, visible: true, locked: false, radius: 24 }
+  return { id: uid(), name: 'Фигура', origin:'manual', role: 'decoration', type: 'shape', kind, fill: '#7047eb', x: doc.width * .15, y: doc.height * .2, width: doc.width * .3, height: doc.height * .2, rotation: 0, visible: true, locked: false, radius: 24 }
 }
 export function composeGroup(doc: Settings, proposal: Proposal): Group {
   proposal=artDirectProposal(doc,proposal)
@@ -25,16 +25,16 @@ export function composeGroup(doc: Settings, proposal: Proposal): Group {
     const elements: Element[] = []
     const shape = (kind: Extract<Element,{type:'shape'}>['kind'], x:number,y:number,width:number,height:number,fill:string, opacity = 1, rotation = 0) => {
       const names={rect:'Плашка',ellipse:'Овал',arrow:'Стрелка',star:'Звезда',line:'Линия',curve:'Рисованная стрелка'}
-      const e = { ...shapeElement(doc,kind),name:`${names[kind]} ${elements.filter(e=>e.type==='shape').length+1}`, x:x*w,y:y*h,width:Math.max(1,width*w),height:Math.max(1,height*h),fill,opacity,rotation,radius:u*.025 }
+      const e = { ...shapeElement(doc,kind),origin:'generated' as const,name:`${names[kind]} ${elements.filter(e=>e.type==='shape').length+1}`, x:x*w,y:y*h,width:Math.max(1,width*w),height:Math.max(1,height*h),fill,opacity,rotation,radius:u*.025 }
       elements.push(e); return e
     }
     const text = (value:string, role: Extract<Element,{type:'text'}>['role'], x:number,y:number,width:number,height:number,size:number,fill=fg,font=s.bodyFont,bold=false,align:'left'|'center'|'right'='left') => {
       if (!value) return
       const readableFill=role==='label'&&fill===accent&&contrastRatio(fill,bg)<4.5?fg:fill
-      elements.push({ ...textElement(doc,value), role, name: role === 'heading' ? 'Заголовок' : role === 'body' ? 'Основной текст' : role === 'counter' ? 'Номер слайда' : role==='brand'?y>.9?'Подпись бренда':'Бренд':'Акцент', x:x*w,y:y*h,width:width*w,height:height*h,size:Math.min(300,Math.max(8,size*u)),fill:readableFill,font,bold,align,lineHeight:role==='heading'?1.08:1.35,letterSpacing:role==='heading'?-u*.001:0,...(doc.direction==='bold'&&role==='heading'&&fill===fg?{gradient:accent}:{}) })
+      elements.push({ ...textElement(doc,value), origin:'generated', role, name: role === 'heading' ? 'Заголовок' : role === 'body' ? 'Основной текст' : role === 'counter' ? 'Номер слайда' : role==='brand'?y>.9?'Подпись бренда':'Бренд':'Акцент', x:x*w,y:y*h,width:width*w,height:height*h,size:Math.min(300,Math.max(8,size*u)),fill:readableFill,font,bold,align,lineHeight:role==='heading'?1.08:1.35,letterSpacing:role==='heading'?-u*.001:0,...(doc.direction==='bold'&&role==='heading'&&fill===fg?{gradient:accent}:{}) })
     }
     const picture = (x:number,y:number,width:number,height:number) => {
-      if (s.artwork) elements.push({ id:uid(),type:'image',role:'artwork',name:'Иллюстрация',src:s.artwork.src,x:x*w,y:y*h,width:width*w,height:height*h,rotation:0,visible:true,locked:false,fit:'cover',cropX:.5,cropY:.5 })
+      if (s.artwork) elements.push({ id:uid(),type:'image',origin:'generated',role:'artwork',name:'Иллюстрация',src:s.artwork.src,x:x*w,y:y*h,width:width*w,height:height*h,rotation:0,visible:true,locked:false,fit:'cover',cropX:.5,cropY:.5 })
     }
     // Decoration is always behind the reading areas and remains individually editable.
     if(doc.direction!=='minimal'){const wash = shape('rect',0,0,1,1,bg); wash.gradient = accent; wash.opacity = .08; wash.radius = 0}
@@ -90,7 +90,7 @@ export function composeGroup(doc: Settings, proposal: Proposal): Group {
     text(`${index+1} / ${proposal.slides.length}`,'counter',.8,.035,.13,.04,.022,fg,s.bodyFont,true,'right')
     shape('line',.065,.925,.87,.002,fg,.3)
     text(doc.brand?.enabled?(doc.brand.contact||s.footer||proposal.name):(s.footer || proposal.name),'brand',.065,.94,.87,.03,.019)
-    if(doc.brand?.enabled&&doc.brand.logo){const aspect=doc.brand.logoAspect??1,width=Math.min(w*.055,u*.05*aspect),height=width/aspect;elements.push({id:uid(),type:'image',role:'brand',name:'Логотип',src:doc.brand.logo,x:w*.735,y:h*.03,width,height,fit:'contain',rotation:0,locked:true,visible:true})}
+    if(doc.brand?.enabled&&doc.brand.logo){const aspect=doc.brand.logoAspect??1,width=Math.min(w*.055,u*.05*aspect),height=width/aspect;elements.push({id:uid(),type:'image',origin:'generated',role:'brand',name:'Логотип',src:doc.brand.logo,x:w*.735,y:h*.03,width,height,fit:'contain',rotation:0,locked:true,visible:true})}
     return { id:uid(), layout:s.layout, title:s.title, background:bg, elements }
   }) }
 }

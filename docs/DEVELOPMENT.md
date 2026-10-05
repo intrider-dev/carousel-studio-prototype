@@ -21,6 +21,7 @@ npm run test:browser
 
 - Unit tests cover contracts, cloning, counters, geometry, branding, and template output.
 - Browser regressions cover layers, photos, fonts, persistence, recovery, cancellation, staged generation, analysis, project switching, and exports.
+- `dialog-edits.js` covers in-place edits, rewrite/redesign/retopic, operation preview, draft reload, stale and invalid results, group structure, picture replacement, undo/redo, and ZIP.
 - `tests/run-browser.mjs` creates and closes an isolated Playwright CLI session. Controlled responses avoid provider charges.
 - Verification output goes to ignored `output/playwright/`.
 - Older `*-flow.js` files describe previous interface states. The supported regression entry point is `npm run test:browser`.
@@ -32,6 +33,10 @@ npm run test:browser
 `node tests/verify-production-export.mjs` verifies local sample output: document contract, PNG dimensions, ZIP CRC, and equality of archived and individual files. Generated output is not shipped. README screenshots are documentation assets, not test fixtures.
 
 `design-live-start.js`, `design-live-pictures.js`, and `design-live-finish.js` exercise a six-slide square series with real generated object illustrations. `design-reexport.js` rebuilds its design without repurchasing images; `verify-design-export.mjs` verifies all six PNGs and the ZIP. These scripts require their dedicated session and output files.
+
+`dialog-live-start.js` / `dialog-live-finish.js`, `dialog-redesign-start.js` / `dialog-redesign-finish.js`, and `dialog-photo-start.js` / `dialog-photo-finish.js` exercise real-model edits on an existing six-slide sample. They incur provider charges. `verify-dialog-export.mjs` compares the before/after JSON and ZIP, including unchanged surrounding slides, identities and pictures. Sample input files must already exist in ignored output.
+
+After those runs, `dialog-review.js` uses a controlled deletion response to check the actual-operation disclosure and the 390 px dialogue layout without applying the deletion or purchasing pictures.
 
 ## Manual acceptance
 
@@ -47,6 +52,9 @@ npm run test:browser
 10. Download JSON, create another project, reopen the first from the library, and test JSON import.
 11. Repeat key controls at 390 px width and with the keyboard.
 12. Select a group, choose a visual direction under the brief, and click "Обновить дизайн". Verify that a new group appears and the original retains all its layers. The rebuilt group carries the first heading, body, label and main photo from each slide. Check the full last line of long titles, gradient controls and curved-arrow dragging. Wait for "Сохранено в этом браузере" before reloading.
+13. In the dialogue choose "Изменить по запросу" and one slide. Change text, color or coordinates. Review the actual operation list, reload the saved plan, apply, undo and redo. Confirm that neighboring slides and photos remain unchanged.
+14. Redesign the current group with image regeneration off, then change one slide's topic with regeneration on. Confirm that source IDs and manual elements survive and that paid image requests start only after approval.
+15. Rename/reorder/duplicate a group, add a slide with an existing picture, delete the group and undo. Check counters and limits. Edit a source after requesting a plan and verify that stale application is blocked.
 
 ## Failure cases
 

@@ -19,6 +19,8 @@ This repository is a local carousel editor prototype. Keep this status explicit 
 - Preserve independent layer identities, counters, photo aspect ratios, and manually added layers.
 - Persist successful generation stages. Retries must not repurchase successful pictures.
 - Apply generated content explicitly; do not silently overwrite projects or layers.
+- Bind pending modifications to source IDs and canonical content revisions, including photos. Verify that save/load alone preserves a binding, while real source edits invalidate it.
+- Review actual operations before application. Preserve manual layers during redesign and validate the complete result atomically before adding a history entry.
 - Keep the external chat optional and preserve bridge origin checks.
 - Validate provider output and imported files. Retain bounds and size limits.
 

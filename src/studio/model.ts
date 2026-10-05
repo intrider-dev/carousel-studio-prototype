@@ -8,7 +8,7 @@ export type { Proposal }
 
 export const fonts = [...fontNames]
 const color = z.string().regex(/^#[0-9a-f]{6}$/i)
-const base = z.object({ id: z.string().min(1).max(80), name: z.string().max(100), role: z.enum(['heading', 'body', 'counter', 'decoration', 'artwork', 'label', 'brand']).optional(), opacity: z.number().min(0).max(1).optional(), x: z.number().finite().min(-4096).max(4096), y: z.number().finite().min(-4096).max(4096), width: z.number().min(1).max(8192), height: z.number().min(1).max(8192), rotation: z.number().min(-360).max(360), locked: z.boolean(), visible: z.boolean() })
+const base = z.object({ id: z.string().min(1).max(80), name: z.string().max(100), origin:z.enum(['manual','generated']).optional(), role: z.enum(['heading', 'body', 'counter', 'decoration', 'artwork', 'label', 'brand']).optional(), opacity: z.number().min(0).max(1).optional(), x: z.number().finite().min(-4096).max(4096), y: z.number().finite().min(-4096).max(4096), width: z.number().min(1).max(8192), height: z.number().min(1).max(8192), rotation: z.number().min(-360).max(360), locked: z.boolean(), visible: z.boolean() })
 export const elementSchema = z.discriminatedUnion('type', [
   base.extend({ type: z.literal('text'), text: z.string().max(2000), font: z.string().max(100), size: z.number().min(8).max(300), bold: z.boolean(), italic: z.boolean(), fill: color, gradient:color.optional(), align: z.enum(['left', 'center', 'right']), lineHeight: z.number().min(.8).max(2).optional(), letterSpacing: z.number().min(-10).max(40).optional() }),
   base.extend({ type: z.literal('image'), src: pictureSource, fit: z.enum(['contain', 'cover']).optional(), cropX: z.number().min(0).max(1).optional(), cropY: z.number().min(0).max(1).optional() }),
@@ -31,16 +31,16 @@ export function parseProposal(text: string): Proposal {
 }
 export const uid = () => crypto.randomUUID()
 export function textElement(doc: Settings, text = 'Новый текст'): Extract<Element, { type: 'text' }> {
-  return { id: uid(), name: 'Текст', type: 'text', text, x: doc.width * .08, y: doc.height * .12, width: doc.width * .84, height: doc.height * .18, rotation: 0, locked: false, visible: true, font: '', size: Math.round(doc.width * .05), bold: false, italic: false, fill: '#171717', align: 'left' }
+  return { id: uid(), name: 'Текст', origin:'manual', type: 'text', text, x: doc.width * .08, y: doc.height * .12, width: doc.width * .84, height: doc.height * .18, rotation: 0, locked: false, visible: true, font: '', size: Math.round(doc.width * .05), bold: false, italic: false, fill: '#171717', align: 'left' }
 }
 export function makeGroup(doc: Settings, proposal?: Proposal): Group {
   if (proposal) return composeGroup(doc, proposal)
   const source = { name: 'Новая группа', background: '#ffffff', foreground: '#171717', slides: [{ title: doc.topic.slice(0,120) || 'Новая карусель', body: 'Откройте диалог и опишите, какую карусель хотите создать.' }] }
   return { id: uid(), name: source.name, slides: source.slides.map((s, i) => ({ id: uid(), title: s.title, background: source.background,
     elements: [
-      { ...textElement(doc, s.title), role: 'heading', name: 'Заголовок', bold: true, height: doc.height * .25, fill: source.foreground },
-      { ...textElement(doc, s.body), role: 'body', name: 'Основной текст', y: doc.height * .4, height: doc.height * .42, size: Math.round(doc.width * .031), fill: source.foreground },
-      { ...textElement(doc, `${i + 1} / ${source.slides.length}`), role: 'counter', name: 'Номер слайда', y: doc.height * .9, height: doc.height * .06, size: Math.max(8, Math.round(doc.width * .023)), fill: source.foreground },
+      { ...textElement(doc, s.title), origin:'generated', role: 'heading', name: 'Заголовок', bold: true, height: doc.height * .25, fill: source.foreground },
+      { ...textElement(doc, s.body), origin:'generated', role: 'body', name: 'Основной текст', y: doc.height * .4, height: doc.height * .42, size: Math.round(doc.width * .031), fill: source.foreground },
+      { ...textElement(doc, `${i + 1} / ${source.slides.length}`), origin:'generated', role: 'counter', name: 'Номер слайда', y: doc.height * .9, height: doc.height * .06, size: Math.max(8, Math.round(doc.width * .023)), fill: source.foreground },
     ],
   })) }
 }
@@ -54,5 +54,5 @@ export function createDoc(settings: Settings): Doc { return { version: 2, id: ui
 export function cloneSlide(slide: Slide): Slide { return { ...slide, id: uid(), elements: slide.elements.map(e => ({ ...e, id: uid() })) } }
 export function contextFor(doc: Doc, group: Group, slideId?: string) {
   return { width: doc.width, height: doc.height, topic: doc.topic, style: doc.style, group: group.name, brief:doc.brief, direction:doc.direction, brand:doc.brand?{...doc.brand,logo:doc.brand.logo?'uploaded':undefined}:undefined,
-    slides: group.slides.filter(s => !slideId || s.id === slideId).map(s => ({ id: s.id, title: s.title, background: s.background, texts: s.elements.filter(e => e.type === 'text').map(e => e.text), images: s.elements.filter(e => e.type === 'image').length, layers: s.elements.map(e => { const { id, name, type, x, y, width, height, rotation, role } = e; return { id, name, type, x, y, width, height, rotation, role, ...(e.type === 'text' ? { text: e.text, font: e.font || doc.defaultFont, size: e.size, fill: e.fill } : {}) } }) })) }
+    slides: group.slides.filter(s => !slideId || s.id === slideId).map(s => ({ id: s.id, title: s.title, background: s.background, texts: s.elements.filter(e => e.type === 'text').map(e => e.text), images: s.elements.filter(e => e.type === 'image').length, layers: s.elements.map(e => { const { id, name, type, x, y, width, height, rotation, role } = e; return { id, name, type, x, y, width, height, rotation, role, locked:e.locked,visible:e.visible,opacity:e.opacity,origin:e.origin,...(e.type === 'text' ? { text: e.text, font: e.font || doc.defaultFont, size: e.size, fill: e.fill,bold:e.bold,italic:e.italic,align:e.align,lineHeight:e.lineHeight,gradient:e.gradient } : e.type==='shape'?{kind:e.kind,fill:e.fill,gradient:e.gradient,stroke:e.stroke,strokeWidth:e.strokeWidth}: {fit:e.fit,cropX:e.cropX,cropY:e.cropY}) } }) })) }
 }

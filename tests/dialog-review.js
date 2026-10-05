@@ -1,0 +1,36 @@
+// oxlint-disable-next-line no-unused-expressions -- Evaluated by the browser CLI.
+async(page)=>{
+ await page.reload()
+ await page.setViewportSize({width:1600,height:1100})
+ await page.getByRole('link',{name:'Редактор',exact:true}).click()
+ await page.getByLabel('Открыть JSON',{exact:true}).setInputFiles('output/playwright/dialog-photo.json')
+ await page.waitForFunction(()=>document.querySelector('#group')?.options.length===3)
+ await page.locator('#group').selectOption(await page.locator('#group option').last().getAttribute('value'))
+ await page.getByRole('link',{name:'Диалог',exact:true}).click()
+ const clear=page.getByRole('button',{name:'Убрать результат',exact:true})
+ await page.waitForFunction(()=>Array.from(document.querySelectorAll('select')).some(s=>s.id==='action'))
+ if(await clear.count())await clear.click()
+ await page.getByLabel('Действие',{exact:true}).selectOption('edit')
+ await page.getByLabel('Контекст',{exact:true}).selectOption('slide')
+ await page.route('**/studio-api/complete',route=>{
+  const request=route.request().postDataJSON(),slide=request.context.slides[0]
+  return route.fulfill({json:{text:JSON.stringify({summary:'Изменить оформление',operations:[{op:'delete_layer',slideId:slide.id,layerId:slide.layers.find(l=>l.type==='image').id}]})}})
+ })
+ await page.getByLabel('Запрос',{exact:true}).fill('Удали фотографию с текущего слайда.')
+ await page.getByRole('button',{name:'Отправить запрос',exact:true}).click()
+ await page.getByRole('button',{name:'Применить изменения',exact:true}).waitFor()
+ await page.waitForFunction(()=>Array.from(document.querySelectorAll('button')).some(b=>b.textContent==='Применить изменения'&&!b.disabled))
+ await page.waitForFunction(()=>Array.from(document.images).some(img=>img.alt==='Где ваш ориентир?'&&img.complete&&img.naturalWidth>0))
+ const details=page.locator('details').filter({has:page.getByText('Что изменится',{exact:true})})
+ if(!await details.getAttribute('open')&&await details.getAttribute('open')!== '')throw new Error('Deletion details must open automatically')
+ if(!/удал/iu.test(await details.innerText()))throw new Error('Actual deletion is missing from review')
+ await page.screenshot({path:'output/playwright/dialog-review-desktop.png',fullPage:true})
+ await page.setViewportSize({width:390,height:844})
+ await page.screenshot({path:'output/playwright/dialog-review-mobile.png',fullPage:true})
+ const bounds=await page.evaluate(()=>({width:innerWidth,document:document.documentElement.scrollWidth}))
+ if(bounds.document>bounds.width+1)throw new Error('Dialog overflows on mobile: '+JSON.stringify(bounds))
+ await clear.click()
+ await page.unroute('**/studio-api/complete')
+ await page.setViewportSize({width:1600,height:1100})
+ return {deletionShownDespiteVagueSummary:true,destructiveDetailsExpanded:true,mobileWidth:390,noHorizontalOverflow:true,previewOnly:true}
+}

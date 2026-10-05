@@ -17,6 +17,8 @@
 - Consistent fonts across a series, gradient text, and curved arrows.
 - Rebuild a group's design into a new group while keeping the original layers.
 - Analyze references or a whole group; rewrite text or change the topic.
+- Edit existing slides and groups from a prompt: text, fonts, colors, geometry, layer order, and group structure.
+- Preview exact operations, apply explicitly, undo, and reject stale responses.
 - Local project library, saved generation drafts, partial-image retries, and JSON transfer.
 - Technical checks for text overflow, bounds, contrast, and image resolution.
 - PNG and ZIP export in project, square, portrait, story, or landscape sizes.
@@ -30,6 +32,8 @@ The interface currently uses Russian. FORM is a fictional demonstration collecti
 ![Technical review](docs/screenshots/review.png)
 
 <img src="docs/screenshots/slide.png" alt="Exported demonstration slide" width="360" />
+
+![Redesign an existing slide from the dialogue](docs/screenshots/dialog.png)
 
 ## Run with Docker
 
@@ -72,6 +76,8 @@ For manual editing without a provider, keep the external configuration file pres
 5. Edit layers, run review, and export PNG or ZIP.
 6. Reload and reopen the project. Export JSON for transfer or backup.
 
+For existing content, choose **Изменить по запросу** and the current slide or group. Describe the changes, review the operation list and previews, then apply. **Переделать дизайн** rebuilds compositions in place while preserving added layers; pictures can be reused or regenerated. **Переписать текст** keeps the visual layers. **Сменить тему** replaces the selected content rather than appending a group. Picture replacement sends the current picture as a reference when the selected model supports image input.
+
 ## Prototype limitations
 
 - Projects live in the current browser's IndexedDB. No accounts, cloud sync, shared projects, or collaboration.
@@ -81,6 +87,7 @@ For manual editing without a provider, keep the external configuration file pres
 - New export aspect ratios need visual review. Modified compositions preserve layers through scaling.
 - Digital PNG exports only; no print-ready CMYK/PDF, social publishing, or scheduler.
 - Compatibility with arbitrary chat applications is not guaranteed. Only the documented local environment has been verified.
+- Structured redesign and rewriting accept up to twelve slides per request. Operation plans accept up to eighty operations, within the editor's twelve-group, twenty-slide, and forty-layer limits. There is no unrestricted command execution or guaranteed interpretation of every prompt.
 
 ## Development
 
@@ -96,6 +103,6 @@ npm run test:browser
 
 Browser checks require the Docker service, a browser, and npm access for Playwright CLI. The regression suite uses controlled responses and does not purchase generation requests. Live scripts are separate and can incur charges.
 
-Current baseline: **21 unit tests and 67 browser assertions**. See [development and manual checks](docs/DEVELOPMENT.md), [architecture](docs/ARCHITECTURE.md), and [project instructions](AGENTS.md).
+Current baseline: **35 unit tests and 95 browser assertions**. See [development and manual checks](docs/DEVELOPMENT.md), [architecture](docs/ARCHITECTURE.md), and [project instructions](AGENTS.md).
 
 Standard shadcn/ui components are used without theme redesign. The vendored stylesheet retains its [MIT notice](src/styles/vendor/shadcn.LICENSE.md); dependency and font licenses remain with their packages.
