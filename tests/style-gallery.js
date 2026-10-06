@@ -1,7 +1,5 @@
 // oxlint-disable-next-line no-unused-expressions -- Evaluated by the browser CLI.
 async (page) => {
- const setCheckbox=async(locator,value)=>{if(await locator.isChecked()!==value)await locator.locator('xpath=ancestor::label').click();if(await locator.isChecked()!==value)throw new Error('Checkbox did not change') }
-
  const entries=[
   {file:'direction-auto',direction:'По теме',picture:'photo',layout:'poster',label:'По теме'},
   {file:'direction-editorial',direction:'Журнальный',picture:'photo',layout:'editorial',label:'Журнальный'},
@@ -52,7 +50,7 @@ async (page) => {
    await page.locator('#palette').selectOption('editorial')
    await page.locator('#generation-font').selectOption('Manrope Variable')
   }
-  await setCheckbox(page.getByLabel('Сразу создавать изображения',{exact:true}),false)
+  await page.getByLabel('Сразу создавать изображения',{exact:true}).uncheck()
   await page.getByRole('button',{name:/^Настройки/}).first().click()
   await page.getByLabel('Запрос',{exact:true}).fill(`Создай ровно один слайд. Имя группы «${entry.label}». Композиция ${layout}: ${entry.file.startsWith('picture-')?'один постер для сравнения техники изображения':'рекомендованная для этого направления обложка'}. Заголовок точно «${title}». Основной текст точно «${body}». Рубрика «Домашний офис», highlight «Начните с одной вещи», footer «Уберите со стола одну лишнюю вещь». Не повторяй основной текст в других полях. Декор только по смыслу и без перегруза. Сюжет изображения: настольная лампа с округлым купольным абажуром и цилиндрическим основанием, визуальная метафора свободного места для работы. Техника определяется выбранным стилем изображений. Возьми палитру из направления оформления. ImagePrompt описывает самостоятельную картинку без надписей, текста, логотипов, карточек и рамок. Главный предмет целиком в кадре, с выразительным силуэтом и ракурсом. Окружение, формы и материалы должны подчёркивать выбранную технику. Цвета и шрифты должны учитывать настройки проекта.`)
   const response=page.waitForResponse(r=>r.url().endsWith('/studio-api/complete')&&r.request().postDataJSON().action==='generate',{timeout:190000})
@@ -91,7 +89,7 @@ async (page) => {
   await page.getByRole('button',{name:button,exact:true}).click()
   await(await download).saveAs(path)
  }
- await page.getByRole('tab',{name:'Проверка серии',exact:true}).click()
+ await page.getByRole('button',{name:'Проверка серии',exact:true}).click()
  await page.getByText('Критических ошибок нет',{exact:true}).waitFor()
  await page.waitForFunction(()=>{const images=Array.from(document.querySelectorAll('[aria-label="Просмотр серии"] img'));return images.length===1&&images.every(img=>img.complete&&img.naturalWidth>0)})
  const warnings=await page.getByText(/^Замечаний: /).textContent()

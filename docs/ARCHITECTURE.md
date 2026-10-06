@@ -1,6 +1,6 @@
 # Architecture
 
-A single-user local prototype: React 19, TypeScript, Vite, official Untitled UI React components, React Aria, Konva, Zod, IndexedDB, and a small Node HTTP server.
+A single-user local prototype: React 19, TypeScript, Vite, standard shadcn/ui, Konva, Zod, IndexedDB, and a small Node HTTP server.
 
 ```mermaid
 flowchart LR
@@ -19,9 +19,7 @@ flowchart LR
 | --- | --- |
 | `src/studio/Studio.tsx` | Project state, history, workspace, controls, imports, exports |
 | `src/studio/interface.tsx`, `motion.ts`, `src/styles/workspace.css` | Disclosure, pending states, input-aware motion, workspace layout |
-| `src/components/base/`, `src/components/application/modals/`, `tabs/`, `loading-indicator/`, `src/styles/theme.css` | Official kit controls and default theme |
-| `src/components/application/navigation/`, `panel/`, `fields/`, `confirmation/` | Small app compositions and native validation adapters |
-| `src/studio/project-library.tsx` | Accessible local project library |
+| `src/components/ui/dialog.tsx`, `src/studio/project-library.tsx` | Standard modal primitives and local project library |
 | `shared/design.ts` | Brief, brand, and visual directions |
 | `shared/visual-styles.ts` | Picture technique catalog shared by planning and both picture APIs |
 | `shared/proposal.ts` | Generation contract and visual vocabulary |
@@ -42,7 +40,7 @@ flowchart LR
 
 ## Persistence
 
-The `carousel-studio` database separates metadata from data URLs. Assets are deduplicated by hash. Project summaries support the local library. The last healthy document is retained as a recovery copy. Generation drafts include successful pictures and history. Draft restoration precedes catalog defaults; saves wait for restoration so fallback fields cannot replace a saved plan or successful pictures.
+The `carousel-studio` database separates metadata from data URLs. Assets are deduplicated by hash. Project summaries support the local library. The last healthy document is retained as a recovery copy. Generation drafts include successful pictures and history.
 
 JSON transfer includes images and uploaded fonts. Clearing browser data removes local projects; cloud backup is not provided.
 
@@ -50,7 +48,7 @@ JSON transfer includes images and uploaded fonts. Clearing browser data removes 
 
 The editor separates design, brief/brand, and review. Desktop design uses a filmstrip, canvas, and inspector; narrow screens put the canvas first and use a horizontal filmstrip. Selected properties precede the layer list in both DOM and visual order. Sidebars scroll independently on wide screens.
 
-Hidden workspaces retain their mounted controls and selection. React Aria tabs provide keyboard navigation and named panels. Workspace entries use opacity and a 4 px translation over 160 ms. Controls and modals use the kit's default transitions; disclosure chevrons rotate over 180 ms. Keyboard-triggered navigation and reduced-motion preferences skip movement. Dragging and typing are immediate. Fixed-aspect preview frames preserve dimensions while images load.
+Hidden workspaces retain their mounted controls and selection. Workspace entries use opacity and a 4 px translation over 160 ms; disclosures use 180 ms height transitions, dialogs use 150 ms, and control colors use 120 ms. Keyboard-triggered navigation and reduced-motion preferences skip movement. Dragging and typing are immediate. Fixed-aspect preview frames preserve dimensions while images load.
 
 The project library traps focus, closes with Escape, and restores focus to its trigger. Applying a result uses a synchronous guard as well as the visible busy state to prevent duplicate groups. Technical review hides old findings while checking a changed document.
 

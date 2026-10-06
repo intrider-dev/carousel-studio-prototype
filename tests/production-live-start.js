@@ -1,7 +1,5 @@
 // oxlint-disable-next-line no-unused-expressions -- Evaluated by the browser CLI.
 async (page) => {
- const setCheckbox=async(locator,value)=>{if(await locator.isChecked()!==value)await locator.locator('xpath=ancestor::label').click();if(await locator.isChecked()!==value)throw new Error('Checkbox did not change') }
-
  await page.setViewportSize({width:1600,height:1100})
  await page.getByLabel('Тема *',{exact:true}).fill('FORM. Керамика для тихих ежедневных ритуалов')
  await page.getByLabel('Стиль',{exact:true}).fill('Элегантный предметный editorial: керамическая чашка, фактура глины, утренний свет. Натуральные материалы, глубокий зелёный фон, кремовая типографика, золотистый акцент. Не придумывай скидки, цены, характеристики товара и отзывы. Фотографии без текста и логотипов.')
@@ -12,7 +10,7 @@ async (page) => {
  await page.getByLabel('Призыв к действию',{exact:true}).fill('Посмотрите коллекцию')
  await page.getByRole('button',{name:/^Премиальный/}).click()
  await page.getByText('Бренд',{exact:true}).click()
- await setCheckbox(page.getByLabel('Использовать бренд',{exact:true}),true)
+ await page.getByLabel('Использовать бренд',{exact:true}).check()
  for(const [label,value] of [['Название бренда','FORM'],['Контакт или подпись','FORM / Керамика'],['Фон','#202722'],['Текст','#f5eedf'],['Акцент','#d5b982']])await page.getByLabel(label,{exact:true}).fill(value)
  await page.getByLabel('Шрифт заголовков',{exact:true}).selectOption('Cormorant Garamond Variable')
  await page.getByLabel('Шрифт основного текста',{exact:true}).selectOption('Montserrat Variable')

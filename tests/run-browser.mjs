@@ -18,7 +18,6 @@ try {
   run(['run-code','--filename','tests/interface-regression.js'])
   run(['run-code','--filename','tests/basic-navigation.js'])
   run(['run-code','--filename','tests/style-regression.js'])
-  run(['run-code','--filename','tests/components-regression.js'])
 } catch(error) {
   run(['snapshot'])
   run(['screenshot','--filename','output/playwright/check-failure.png'])

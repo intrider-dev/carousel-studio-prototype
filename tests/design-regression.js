@@ -5,7 +5,7 @@ async (page) => {
  await page.getByLabel('Соотношение сторон',{exact:true}).selectOption('1:1')
  await page.getByRole('button',{name:/^Смелый/}).click()
  await page.getByRole('button',{name:'Создать проект',exact:true}).click()
- await page.getByRole('tab',{name:'Свойства',exact:true}).click()
+ await page.getByRole('button',{name:'Свойства',exact:true}).click()
  await page.getByRole('button',{name:'Фигура',exact:true}).click()
  await page.getByLabel('Тип фигуры',{exact:true}).selectOption('curve')
  await page.getByLabel('Название слоя',{exact:true}).fill('Кривая')
@@ -36,7 +36,7 @@ async (page) => {
  const lines=await page.evaluate(e=>{const ctx=document.createElement('canvas').getContext('2d');ctx.font=`bold ${e.size}px "${e.font}"`;let count=1,line='';for(const word of e.text.split(/\s+/)){const next=line?line+' '+word:word;if(ctx.measureText(next).width+next.length*(e.letterSpacing??0)>e.width&&line){count++;line=word}else line=next}return count},heading)
  check(lines*heading.size*heading.lineHeight<=heading.height,'Every line of a long heading fits without fractional clipping')
  await page.waitForFunction(()=>document.querySelector('header [role="status"]')?.textContent==='Сохранено в этом браузере')
- await page.reload();await page.getByRole('tab',{name:'Свойства',exact:true}).click()
+ await page.reload();await page.getByRole('button',{name:'Свойства',exact:true}).click()
  await installProbe()
  check((await snapshot()).groups.length===2,'Restyled group survives reload')
  const dl=page.waitForEvent('download');await page.getByRole('button',{name:'ZIP группы',exact:true}).click();await dl

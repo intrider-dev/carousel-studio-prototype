@@ -1,7 +1,5 @@
 // oxlint-disable-next-line no-unused-expressions -- Evaluated by the browser CLI.
 async (page) => {
- const setCheckbox=async(locator,value)=>{if(await locator.isChecked()!==value)await locator.locator('xpath=ancestor::label').click();if(await locator.isChecked()!==value)throw new Error('Checkbox did not change') }
-
  const checks=[],errors=[],check=(ok,label)=>{if(!ok)throw new Error(label);checks.push(label)}
  page.on('pageerror',e=>errors.push(e.message))
  page.on('console',m=>{if(m.type()==='error')errors.push(m.text())})
@@ -14,7 +12,7 @@ async (page) => {
  await page.getByLabel('Для кого',{exact:true}).fill('Ценители керамики');await page.getByLabel('Призыв к действию',{exact:true}).fill('Посмотрите коллекцию')
  await page.getByRole('button',{name:/^Чистый/}).click()
  await page.getByText('Бренд',{exact:true}).click()
- await setCheckbox(page.getByLabel('Использовать бренд',{exact:true}),true)
+ await page.getByLabel('Использовать бренд',{exact:true}).check()
  await page.getByLabel('Название бренда',{exact:true}).fill('FORM');await page.getByLabel('Контакт или подпись',{exact:true}).fill('@form')
  await page.getByLabel('Текст',{exact:true}).fill('#20201d')
  const logo=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=200;c.height=50;c.getContext('2d').fillRect(0,0,200,50);return c.toDataURL('image/png').split(',')[1]})
@@ -41,7 +39,7 @@ async (page) => {
  await page.waitForFunction(()=>[...document.querySelectorAll('button')].some(b=>b.textContent==='Добавить группу'&&!b.disabled))
  check(imageCalls===4,'Four plan-approved pictures generated')
  await apply.click();await page.getByRole('heading',{name:'Редактор слайдов',exact:true}).waitFor()
- await page.getByRole('tab',{name:'Свойства',exact:true}).click();await page.getByRole('button',{name:'Заголовок',exact:true}).click()
+ await page.getByRole('button',{name:'Свойства',exact:true}).click();await page.getByRole('button',{name:'Заголовок',exact:true}).click()
  check(await page.getByLabel('Шрифт слоя',{exact:true}).inputValue()==='Playfair Display Variable','Locked brand font overrides model choice')
  check(await page.getByLabel('Фон слайда',{exact:true}).inputValue()==='#f5f2eb','Locked brand palette overrides model choice')
  await page.getByRole('button',{name:'Логотип · закреплён',exact:true}).click()
@@ -53,14 +51,14 @@ async (page) => {
  await page.waitForFunction(()=>![...document.querySelectorAll('button')].some(b=>b.textContent==='Остановить'))
  check(JSON.stringify(analysisBatches)==='[3,1]','Full group analysis covers all four slides in two batches')
  await page.getByRole('link',{name:'Редактор',exact:true}).click()
- await page.getByRole('tab',{name:'Проверка серии',exact:true}).click()
+ await page.getByRole('button',{name:'Проверка серии',exact:true}).click()
  await page.getByText('Критических ошибок нет',{exact:true}).waitFor()
  check(await page.getByRole('button',{name:/изображение увеличено выше исходного разрешения/}).count()>0,'Review warns about image enlargement')
- await page.getByRole('tab',{name:'Дизайн',exact:true}).click()
+ await page.getByRole('button',{name:'Дизайн',exact:true}).click()
  const canvas=page.getByRole('region',{name:'Холст слайда',exact:true})
  await canvas.focus();await page.keyboard.press('Shift+ArrowRight')
  await page.getByLabel('X',{exact:true}).fill('2000');await page.getByLabel('X',{exact:true}).press('Tab')
- await page.getByRole('tab',{name:'Проверка серии',exact:true}).click()
+ await page.getByRole('button',{name:'Проверка серии',exact:true}).click()
  await page.getByRole('button',{name:/текст выходит за границы холста/}).first().click()
  check(await page.getByLabel('Название слоя',{exact:true}).inputValue()==='Заголовок','Quality issue opens the affected layer')
  await page.getByRole('button',{name:'Вернуть на холст',exact:true}).click()
@@ -80,9 +78,9 @@ async (page) => {
  await page.getByRole('button',{name:'Проекты',exact:true}).click()
  await page.getByRole('button',{name:/^Керамика FORM/}).click()
  await page.getByRole('dialog',{name:'Проекты',exact:true}).waitFor({state:'hidden'})
- await page.getByRole('tab',{name:'Бриф и бренд',exact:true}).click()
+ await page.getByRole('button',{name:'Бриф и бренд',exact:true}).click()
  check(await page.getByLabel('Название бренда',{exact:true}).inputValue()==='FORM','Project library restores project-specific brand')
- await page.getByRole('tab',{name:'Дизайн',exact:true}).click()
+ await page.getByRole('button',{name:'Дизайн',exact:true}).click()
  await page.getByRole('button',{name:'Фигура',exact:true}).click()
  await page.getByLabel('Цвет фигуры',{exact:true}).fill('#ff00ff')
  for(const [label,value]of [['X','100'],['Y','200'],['Ширина слоя','100'],['Высота слоя','100']]){await page.getByLabel(label,{exact:true}).fill(value);await page.getByLabel(label,{exact:true}).press('Tab')}

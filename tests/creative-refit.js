@@ -3,7 +3,7 @@ async (page) => {
   await page.reload()
   await page.getByRole('heading',{name:'Редактор слайдов',exact:true}).waitFor()
   await page.locator('#group').selectOption(await page.locator('#group option').last().getAttribute('value'))
-  await page.getByRole('tab',{name:'Свойства',exact:true}).click()
+  await page.getByRole('button',{name:'Свойства',exact:true}).click()
   const slides=page.getByRole('button',{name:/^Открыть слайд/})
   for(let i=0;i<await slides.count();i++) {
     await slides.nth(i).click()

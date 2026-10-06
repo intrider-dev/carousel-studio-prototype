@@ -3,7 +3,7 @@ async (page) => {
  await page.reload()
  await page.getByRole('button',{name:'Добавить группу',exact:true}).click()
  await page.getByRole('heading',{name:'Редактор слайдов',exact:true}).waitFor()
- await page.getByRole('tab',{name:'Свойства',exact:true}).click()
+ await page.getByRole('button',{name:'Свойства',exact:true}).click()
  const slides=page.getByRole('button',{name:/^Открыть слайд/})
  if(await slides.count()!==4)throw new Error('Expected 4 slides')
  for(let i=0;i<4;i++){
@@ -17,7 +17,7 @@ async (page) => {
  await page.getByLabel('Формат экспорта',{exact:true}).selectOption('project')
  await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))))
  await page.screenshot({path:'output/playwright/production-editor.png',fullPage:true})
- await page.getByRole('tab',{name:'Проверка серии',exact:true}).click()
+ await page.getByRole('button',{name:'Проверка серии',exact:true}).click()
  await page.getByText('Критических ошибок нет',{exact:true}).waitFor()
  await page.screenshot({path:'output/playwright/production-quality.png',fullPage:true})
  return {slides:4,quality:await page.getByText('Критических ошибок нет',{exact:true}).textContent(),warnings:await page.getByRole('button',{name:/Слайд [1-4] · Проверить/}).allTextContents()}
