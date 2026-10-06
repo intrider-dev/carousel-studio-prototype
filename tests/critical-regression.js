@@ -1,5 +1,7 @@
 // oxlint-disable-next-line no-unused-expressions -- Evaluated by the browser CLI.
 async (page) => {
+ const setCheckbox=async(locator,value)=>{if(await locator.isChecked()!==value)await locator.locator('xpath=ancestor::label').click();if(await locator.isChecked()!==value)throw new Error('Checkbox did not change') }
+
   const checks=[],errors=[]
   page.on('pageerror',e=>errors.push(e.message))
   const check=(ok,label)=>{if(!ok)throw new Error(label);checks.push(label)}
@@ -21,7 +23,7 @@ async (page) => {
   await page.getByRole('button',{name:'Создать проект',exact:true}).click()
   await page.getByRole('heading',{name:'Редактор слайдов',exact:true}).waitFor()
   check((await page.getByRole('button',{name:/^Открыть слайд/}).first().innerText()).includes('Ремонт велосипедов'),'Starter reflects project topic')
-  await page.getByRole('button',{name:'Свойства',exact:true}).click()
+  await page.getByRole('tab',{name:'Свойства',exact:true}).click()
   check(await page.locator('#default-font option').count()===12,'Twelve built-in fonts available')
   await page.evaluate(async()=>{const c=document.createElement('canvas');c.width=2160;c.height=20;c.getContext('2d').fillRect(0,0,2160,20);const b=await new Promise(r=>c.toBlob(r));const d=new DataTransfer();d.items.add(new File([b],'panorama.png',{type:'image/png'}));const input=document.querySelector('input[aria-label="Добавить фотографии"]');input.files=d.files;input.dispatchEvent(new Event('change',{bubbles:true}))})
   await page.getByLabel('Высота слоя',{exact:true}).waitFor();await savedWait()
@@ -58,7 +60,7 @@ async (page) => {
   const content={name:'Тестовая серия',background:'#fff1de',foreground:'#171717',accent:'#e55939',slides:['poster','editorial','finale'].map((layout,i)=>({title:`Готовый заголовок ${i+1}`,body:'Короткий полезный текст.',imagePrompt:'Предмет',layout,headingFont:'Oswald Variable',bodyFont:'Manrope Variable'}))}
   await page.route('**/studio-api/complete',route=>{const body=route.request().postDataJSON();lastBody=body;if(body.action==='image'){imageCalls++;if(mode==='partial'&&imageCalls===2)return route.fulfill({status:502,json:{error:'Контрольный сбой'}});return route.fulfill({json:{image:art}})}textCalls++;if(body.action==='analyze'){analysisRefs=body.references.length;return route.fulfill({json:{text:'Проверен снимок текущего слайда.'}})}return route.fulfill({json:{text:JSON.stringify(body.action==='rewrite'?{...content,slides:body.context.slides.map((s,i)=>({...content.slides[i%3],title:`Новый текст ${i+1}`}))}:content)}})})
   await page.getByRole('link',{name:'Диалог',exact:true}).click()
-  await page.getByLabel('Сразу создавать изображения',{exact:true}).check()
+  await setCheckbox(page.getByLabel('Сразу создавать изображения',{exact:true}),true)
   await page.getByRole('button',{name:'Отправить запрос',exact:true}).click()
   const ready=()=>page.waitForFunction(()=>[...document.querySelectorAll('button')].some(b=>b.textContent==='Добавить группу'&&!b.disabled))
   await ready()

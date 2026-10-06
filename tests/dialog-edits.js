@@ -1,5 +1,7 @@
 // oxlint-disable-next-line no-unused-expressions -- Evaluated by the browser CLI.
 async (page) => {
+ const setCheckbox=async(locator,value)=>{if(await locator.isChecked()!==value)await locator.locator('xpath=ancestor::label').click();if(await locator.isChecked()!==value)throw new Error('Checkbox did not change') }
+
  const checks=[],errors=[],check=(ok,label)=>{if(!ok)throw new Error(label);checks.push(label)}
  page.on('pageerror',e=>errors.push(e.message))
  const savedWait=()=>page.waitForFunction(()=>document.querySelector('header [role="status"]')?.textContent==='Сохранено в этом браузере')
@@ -7,7 +9,7 @@ async (page) => {
  await page.getByLabel('Открыть JSON',{exact:true}).setInputFiles('output/playwright/verified-project.json')
  await page.waitForFunction(()=>document.querySelector('#group')?.options.length===3)
  await page.locator('#group').selectOption(await page.locator('#group option').last().getAttribute('value'))
- await page.getByRole('button',{name:'Свойства',exact:true}).click()
+ await page.getByRole('tab',{name:'Свойства',exact:true}).click()
  await page.getByRole('button',{name:'Фигура',exact:true}).click();await page.getByLabel('Название слоя',{exact:true}).fill('Личный акцент')
  await savedWait()
  let original=await saved(),groupId=await page.locator('#group').inputValue(),group=original.groups.find(g=>g.id===groupId)
@@ -60,7 +62,7 @@ async (page) => {
  await page.getByRole('button',{name:'Отменить изменение',exact:true}).click();await savedWait()
  await page.locator('#group').selectOption(groupId)
  const beforeTopic=await saved(),topicGroup=beforeTopic.groups.find(g=>g.id===groupId)
- await open('retopic','slide');await page.getByLabel('Сразу создавать изображения',{exact:true}).uncheck();await send();await page.getByRole('button',{name:'Создать изображения',exact:true}).click()
+ await open('retopic','slide');await setCheckbox(page.getByLabel('Сразу создавать изображения',{exact:true}),false);await send();await page.getByRole('button',{name:'Создать изображения',exact:true}).click()
  await page.waitForFunction(()=>!Array.from(document.querySelectorAll('button')).find(b=>b.textContent==='Заменить текущие слайды')?.disabled)
  edited=await apply('Заменить текущие слайды');changed=edited.groups.find(g=>g.id===groupId)
  check(edited.groups.length===beforeTopic.groups.length&&changed.slides.length===topicGroup.slides.length,'Retopic replaces the current slide without adding groups or slides')
@@ -74,14 +76,14 @@ async (page) => {
  check(newPhoto.src!==oldPhoto.src&&newPhoto.x===oldPhoto.x&&newPhoto.width===oldPhoto.width,'Photo replacement preserves the selected layer identity and geometry')
  await open('edit','slide');await page.getByText('Настройки',{exact:false}).first().click();await page.locator('#model').selectOption('text-test')
  mode='valid';await send();await page.getByRole('button',{name:'Применить изменения',exact:true}).waitFor()
- await page.getByRole('link',{name:'Редактор',exact:true}).click();await page.getByRole('button',{name:'Свойства',exact:true}).click();await page.getByRole('button',{name:'Заголовок',exact:true}).click();await page.getByLabel('Текст слоя',{exact:true}).fill('Ручная правка после запроса');await savedWait()
+ await page.getByRole('link',{name:'Редактор',exact:true}).click();await page.getByRole('tab',{name:'Свойства',exact:true}).click();await page.getByRole('button',{name:'Заголовок',exact:true}).click();await page.getByLabel('Текст слоя',{exact:true}).fill('Ручная правка после запроса');await savedWait()
  await page.getByRole('link',{name:'Диалог',exact:true}).click()
  await page.getByText('Исходные слайды изменились. Отправьте новый запрос с текущим контекстом.',{exact:true}).waitFor()
  check(await page.getByRole('button',{name:'Применить изменения',exact:true}).isDisabled(),'A stale result cannot overwrite a newer manual edit')
  await page.getByRole('button',{name:'Убрать результат',exact:true}).click();mode='invalid';await send()
  await page.waitForFunction(()=>document.querySelector('[role="alert"]')?.textContent?.includes('Шрифт недоступен'))
  check((await saved()).groups.find(g=>g.id===groupId).slides.some(s=>s.title==='Ручная правка после запроса'),'Invalid model instructions preserve the current document')
- await page.getByRole('link',{name:'Редактор',exact:true}).click();await page.getByRole('button',{name:'Свойства',exact:true}).click();await page.getByRole('button',{name:'Заголовок',exact:true}).click();await page.getByRole('button',{name:'Подогнать текст',exact:true}).click()
+ await page.getByRole('link',{name:'Редактор',exact:true}).click();await page.getByRole('tab',{name:'Свойства',exact:true}).click();await page.getByRole('button',{name:'Заголовок',exact:true}).click();await page.getByRole('button',{name:'Подогнать текст',exact:true}).click()
  const dl=page.waitForEvent('download');await page.getByRole('button',{name:'ZIP группы',exact:true}).click();await(await dl).saveAs('output/playwright/dialog-edits.zip');check(true,'Edited group exports as ZIP')
  check(errors.length===0,'No runtime errors in prompt editing workflow')
  await page.unroute('**/studio-api/complete')

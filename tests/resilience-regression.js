@@ -2,7 +2,7 @@
 async (page) => {
   const checks=[]
   const check=(ok,label)=>{if(!ok)throw new Error(label);checks.push(label)}
-  await page.getByRole('button',{name:'Свойства',exact:true}).click()
+  await page.getByRole('tab',{name:'Свойства',exact:true}).click()
   await page.getByRole('button',{name:'Заголовок',exact:true}).click()
   await page.getByLabel('Текст слоя',{exact:true}).fill('Твой маленький ритуал')
   await page.getByLabel('Шрифт слоя',{exact:true}).selectOption('Playfair Display Variable')

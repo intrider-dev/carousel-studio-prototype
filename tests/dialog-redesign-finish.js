@@ -7,7 +7,7 @@ async(page)=>{
  await page.getByRole('button',{name:'Заменить текущие слайды',exact:true}).click()
  await page.waitForFunction(()=>document.querySelector('header [role="status"]')?.textContent==='Сохранено в этом браузере')
  const dl=page.waitForEvent('download');await page.getByRole('button',{name:'Сохранить JSON',exact:true}).click();await(await dl).saveAs('output/playwright/dialog-redesigned.json')
- await page.getByRole('button',{name:'Свойства',exact:true}).click()
+ await page.getByRole('tab',{name:'Свойства',exact:true}).click()
  await page.screenshot({path:'output/playwright/dialog-redesigned.png',fullPage:true})
  return {title:await page.getByRole('button',{name:/^Открыть слайд 4/}).textContent(),slides:await page.getByRole('button',{name:/^Открыть слайд/}).count()}
 }

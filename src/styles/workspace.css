@@ -1,12 +1,12 @@
-/* Layout and motion only. Component colors and typography use the existing theme. */
+/* App layout and motion only. Component styling comes from Untitled UI. */
 .studio-header {
   position: sticky;
   top: 0;
   z-index: 30;
-  background: var(--background);
+  background: var(--color-bg-primary);
 }
 .studio-main {
-  padding-block: 1.5rem 2.5rem;
+  padding-block: 2rem 3rem;
 }
 .studio-main [hidden] {
   display: none !important;
@@ -20,8 +20,8 @@
 .workspace-rail,
 .workspace-inspector {
   position: sticky;
-  top: 5.5rem;
-  max-height: calc(100dvh - 6.5rem);
+  top: 6.5rem;
+  max-height: calc(100dvh - 7.5rem);
   overflow-y: auto;
   scrollbar-gutter: stable;
 }
@@ -52,6 +52,18 @@
   width: 100%;
   white-space: normal;
 }
+.slide-filmstrip [data-text] {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+.layer-list [data-text] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
 .layer-list {
   max-height: 18rem;
   overflow-y: auto;
@@ -64,24 +76,18 @@
   gap: 1.25rem;
 }
 .canvas-well {
-  background: var(--muted);
+  background: var(--color-bg-secondary);
   padding: 1.5rem;
-  border-radius: var(--radius);
+  border-radius: var(--radius-xl);
 }
 .disclosure-panel {
-  height: var(--collapsible-panel-height);
-  overflow: hidden;
-  transition:
-    height 180ms cubic-bezier(0.23, 1, 0.32, 1),
-    opacity 140ms ease-out;
-}
-.disclosure-panel[data-starting-style],
-.disclosure-panel[data-ending-style] {
-  height: 0;
-  opacity: 0;
+  transition: opacity 140ms ease-out;
 }
 .disclosure-chevron {
   transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+[data-expanded] > h3 .disclosure-chevron {
+  transform: rotate(180deg);
 }
 .studio-main [data-slot="button"],
 .studio-header [data-slot="button"],
@@ -111,8 +117,8 @@
 :root[data-input-mode="keyboard"] .studio-header * {
   transition-duration: 0ms !important;
 }
-:root[data-input-mode="keyboard"] [data-slot="dialog-content"],
-:root[data-input-mode="keyboard"] [data-slot="dialog-overlay"] {
+:root[data-input-mode="keyboard"] [data-studio-modal],
+:root[data-input-mode="keyboard"] [data-studio-overlay] {
   animation-duration: 0ms !important;
 }
 @media (max-width: 1399px) and (min-width: 1024px) {
@@ -178,14 +184,13 @@
 @media (prefers-reduced-motion: reduce) {
   .studio-main *,
   .studio-header *,
-  [data-slot="alert-dialog-overlay"],
-  [data-slot="alert-dialog-content"] {
+  [data-studio-overlay],
+  [data-studio-modal] {
     animation: none !important;
     transition-duration: 0ms !important;
     scroll-behavior: auto !important;
   }
-  [data-slot="dialog-content"],
-  [data-slot="dialog-overlay"] {
+  .react-aria-Dialog {
     animation: none !important;
     transition-duration: 0ms !important;
   }

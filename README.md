@@ -173,6 +173,6 @@ npm run test:browser
 
 Browser checks require the Docker service, a browser, and npm access for Playwright CLI. The regression suite uses controlled responses and does not purchase generation requests. Live scripts are separate and can incur charges.
 
-Current baseline: **38 unit tests and 168 browser assertions**. See [development and manual checks](docs/DEVELOPMENT.md), [architecture](docs/ARCHITECTURE.md), and [project instructions](AGENTS.md).
+Current baseline: **38 unit tests and 194 browser assertions**. See [development and manual checks](docs/DEVELOPMENT.md), [architecture](docs/ARCHITECTURE.md), and [project instructions](AGENTS.md).
 
-Standard shadcn/ui components are used without theme redesign. The vendored stylesheet retains its [MIT notice](src/styles/vendor/shadcn.LICENSE.md); dependency and font licenses remain with their packages.
+The interface is composed from official **Untitled UI React** components with the default theme, Inter typography and Untitled icons. Buttons, inputs, uploads, native selects, checkboxes, tabs, tooltips and modals use the kit. Small app compositions provide navigation, panels and confirmation dialogs. See the [component guide](docs/COMPONENTS.md) for source provenance and integration details. The copied components retain the [MIT notice](src/components/LICENSE); dependency and font licenses remain with their packages.

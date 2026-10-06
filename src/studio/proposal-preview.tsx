@@ -22,7 +22,11 @@ export function ProposalPreview({
       try {
         const composed = makeGroup(doc, proposal);
         await loadSlideFonts(doc, composed.slides);
-        const group = fitGroup(composed, doc.defaultFont, doc.width/doc.height);
+        const group = fitGroup(
+          composed,
+          doc.defaultFont,
+          doc.width / doc.height,
+        );
         for (const slide of group.slides) {
           const blob = await renderSlide(doc, slide, { width: 500 });
           if (!active) return;
@@ -49,7 +53,7 @@ export function ProposalPreview({
       {proposal.slides.map((slide, i) => (
         <div
           key={i}
-          className="relative overflow-hidden rounded-lg border bg-muted"
+          className="relative overflow-hidden rounded-lg border bg-secondary"
           style={{ aspectRatio: `${doc.width} / ${doc.height}` }}
         >
           {previews[i] && (

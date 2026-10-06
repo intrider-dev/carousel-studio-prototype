@@ -23,6 +23,7 @@ npm run test:browser
 - `editorial-prompt.test.ts` verifies shared system guidance across six text actions, unchanged source text, and preserved structured response contracts.
 - `visual-style.test.ts` verifies technique guidance through planning and both picture API paths, conflicting scene descriptions, earlier display labels, and requests with no preset.
 - Browser regressions cover layers, photos, fonts, persistence, recovery, cancellation, staged generation, analysis, project switching, and exports.
+- `components-regression.js` verifies kit checkbox pointer/keyboard behavior, named tab panels, manual tab activation, confirmation focus, long select labels at five widths, file-input label targets, repeat imports, visible error states, and saved model preferences with a fast catalog response.
 - `dialog-edits.js` covers in-place edits, rewrite/redesign/retopic, operation preview, draft reload, stale and invalid results, group structure, picture replacement, undo/redo, and ZIP.
 - `interface-regression.js` creates its own project and checks focused workspaces, series navigation, control order, widths from 320 to 1600 px, modal focus, interrupted transitions, reduced motion, stable previews, and duplicate application protection.
 - `basic-navigation.js` checks the independent checklist flow, heading focus, keyboard slide navigation, narrow screens, saving, and ZIP download. `node tests/verify-basic-export.mjs` verifies its six PNG dimensions, file order, and ZIP CRC.
@@ -70,6 +71,7 @@ After those runs, `dialog-review.js` uses a controlled deletion response to chec
 18. Open Projects and check that the editor does not move. Use Tab, Shift+Tab, and Escape; verify focus returns to Projects. Reopen a saved project.
 19. Open and close dialogue settings repeatedly. Enable the system's reduced-motion preference. Check that keyboard actions are immediate and dragging has no transition delay. During image loading, retain the preview and its frame dimensions.
 20. At 390 px, confirm the canvas precedes project controls and slides scroll horizontally. Open the simple template, edit its text, navigate with arrows, download ZIP, reload, and return to the editor.
+    Use ArrowLeft/ArrowRight to focus workspace tabs and Enter to activate one. Toggle the brand checkbox by its visible label and with Space. Select different text and picture models, reload, and verify both selections and the immediate-image preference remain saved.
 21. In dialogue settings, select each of the six picture styles. Request the same one-slide brief, review the plan, reload, create the picture, and apply. Check the actual technique at full size and thumbnail size, text spacing, the unchanged starting group, and PNG/ZIP export. These live requests can incur charges. Project direction and picture technique are separate settings; explicit layout requests take precedence over recommendations.
 
 ## Failure cases

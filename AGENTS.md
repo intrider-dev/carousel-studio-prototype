@@ -8,13 +8,14 @@ This repository is a local carousel editor prototype. Keep this status explicit 
 - Preserve unrelated changes. Do not modify external chat projects without explicit authorization.
 - Use neutral functional names and professional authorship. Do not label artifacts by the tools used.
 - Keep Russian interface copy short and consistent. Keep model prompts separate from interface copy; do not replace saved user content to shorten the interface.
-- Use existing shadcn/ui components and theme. Avoid new frameworks or architectural layers for small changes.
+- Compose the interface from the official Untitled UI React components and default theme. Keep app layout compositions small; preserve native validation and accessible labels when adapting fields. Do not add a second component kit or restyle the kit controls.
 - Do not create parallel contributors unless explicitly requested.
 
 ## Implementation constraints
 
 - Keep runtime versions consistent in `.nvmrc`, `package.json`, Dockerfile, and documentation.
 - Shared contracts belong in `shared/` and `src/studio/model.ts`.
+- Restore generation drafts before initializing catalog defaults. Defer persistence until restoration finishes. Verify saved model choices and missing-picture retries across reload with a fast catalog response.
 - Preserve the common drawing path for canvas, previews, and exports.
 - Preserve independent layer identities, counters, photo aspect ratios, and manually added layers.
 - Persist successful generation stages. Retries must not repurchase successful pictures.
