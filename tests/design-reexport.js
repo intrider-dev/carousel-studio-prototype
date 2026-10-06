@@ -12,9 +12,9 @@ async (page) => {
  }
  for(const [button,file]of [['Сохранить JSON','design-project.json'],['ZIP группы','design-group.zip']]){const dl=page.waitForEvent('download');await page.getByRole('button',{name:button,exact:true}).click();await(await dl).saveAs('output/playwright/'+file)}
  await slides.first().click()
- await page.getByRole('button',{name:'Свойства',exact:true}).click()
+ await page.getByRole('tab',{name:'Свойства',exact:true}).click()
  await page.screenshot({path:'output/playwright/design-editor.png',fullPage:true})
- await page.getByRole('button',{name:'Проверка серии',exact:true}).click()
+ await page.getByRole('tab',{name:'Проверка серии',exact:true}).click()
  await page.getByText('Серия прошла техническую проверку.',{exact:true}).waitFor()
  await page.screenshot({path:'output/playwright/design-quality.png',fullPage:true})
  return {slides:6,quality:'passed',sourcePreserved:true}

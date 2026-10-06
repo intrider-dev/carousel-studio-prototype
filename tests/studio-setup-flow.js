@@ -40,7 +40,7 @@ async (page) => {
   await page.getByLabel('Добавить фотографии', { exact: true }).setInputFiles('package.json')
   await page.getByText(/Фото: PNG, JPEG или WebP/).waitFor()
   checks.push('Unsupported photo file rejected')
-  await page.getByRole('button', { name: 'Создание слайдов', exact: true }).click()
+  await page.getByRole('tab', { name: 'Создание слайдов', exact: true }).click()
   await page.getByLabel('Действие', { exact: true }).selectOption('analyze')
   await page.getByRole('button', { name: 'Отправить запрос', exact: true }).click()
   await page.getByText('Добавьте изображения чужих слайдов для анализа.', { exact: true }).waitFor()

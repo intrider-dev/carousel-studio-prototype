@@ -2,8 +2,8 @@
 async (page) => {
  await page.reload();await page.getByRole('heading',{name:'Редактор слайдов',exact:true}).waitFor()
  await page.locator('#group').selectOption(await page.locator('#group option').last().getAttribute('value'))
- await page.getByRole('button',{name:'Дизайн',exact:true}).click()
- await page.getByRole('button',{name:'Свойства',exact:true}).click()
+ await page.getByRole('tab',{name:'Дизайн',exact:true}).click()
+ await page.getByRole('tab',{name:'Свойства',exact:true}).click()
  const slides=page.getByRole('button',{name:/^Открыть слайд/})
  for(let i=0;i<4;i++){
   await slides.nth(i).click()
@@ -17,7 +17,7 @@ async (page) => {
  await page.getByLabel('Формат экспорта',{exact:true}).selectOption('project')
  await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))))
  await page.screenshot({path:'output/playwright/production-editor.png',fullPage:true})
- await page.getByRole('button',{name:'Проверка серии',exact:true}).click();await page.getByText('Критических ошибок нет',{exact:true}).waitFor()
+ await page.getByRole('tab',{name:'Проверка серии',exact:true}).click();await page.getByText('Критических ошибок нет',{exact:true}).waitFor()
  await page.waitForFunction(()=>[...document.querySelectorAll('p')].some(x=>x.textContent==='Серия прошла техническую проверку.'))
  await page.screenshot({path:'output/playwright/production-quality.png',fullPage:true})
  return {slides:4,quality:'No remaining technical warnings',sourceFooter:'Adjusted in editor'}

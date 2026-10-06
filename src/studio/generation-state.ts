@@ -13,7 +13,12 @@ function ensure(key:string) {
   const start=revision.get(key)||0
   loading.set(key,readLocal(key).then(value=>{
     if(value && typeof value==='object') { const saved=value as Draft; drafts.set(key,{...saved,busy:false,...(saved.busy ? {error:'Запрос прерван. Готовые этапы сохранены. Продолжите создание недостающих изображений.',progress:''}: {}),...((revision.get(key)||0)!==start?drafts.get(key):{})});notify(key) }
-  }).catch(()=>{drafts.set(key,{error:'Не удалось прочитать черновик генерации.'});notify(key)}))
+  }).catch(()=>{drafts.set(key,{...drafts.get(key),error:'Не удалось прочитать черновик генерации.'});notify(key)}))
+}
+export function loadGenerationDraft(project:string) {
+  const key=`generation:${project}`
+  ensure(key)
+  return loading.get(key)!
 }
 export function useGenerationField<T>(project:string,field:string,fallback:T): [T,Dispatch<SetStateAction<T>>] {
   const key=`generation:${project}`
@@ -26,7 +31,7 @@ export function useGenerationField<T>(project:string,field:string,fallback:T): [
     const resolved=typeof next==='function'?(next as (value:T)=>T)(current):next
     const update={...old,[field]:resolved}; drafts.set(key,update);revision.set(key,(revision.get(key)||0)+1);notify(key)
     const currentRevision=revision.get(key);persistence.set(key,'Сохраняю план…');notify(key)
-    void writeLocal(key,update).then(()=>{if(revision.get(key)===currentRevision){persistence.set(key,'План сохранён');notify(key)}}).catch(()=>{persistence.set(key,'Черновик не сохранился');drafts.set(key,{...drafts.get(key),error:'Черновик не сохранился. Добавьте результат в проект и скачайте файл.'});notify(key)})
+    void loading.get(key)!.then(()=>writeLocal(key,drafts.get(key)??update)).then(()=>{if(revision.get(key)===currentRevision){persistence.set(key,'План сохранён');notify(key)}}).catch(()=>{persistence.set(key,'Черновик не сохранился');drafts.set(key,{...drafts.get(key),error:'Черновик не сохранился. Добавьте результат в проект и скачайте файл.'});notify(key)})
   },[key,field])
   return [value===undefined?fallback:value,set]
 }

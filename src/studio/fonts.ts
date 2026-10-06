@@ -13,3 +13,4 @@ export async function loadSlideFonts(doc: Pick<Doc, 'defaultFont'>, slides: Slid
   await Promise.all([...styles].map(style => document.fonts.load(style, 'Карусель Carousel 0123')))
   await document.fonts.ready
 }
+import '@fontsource-variable/geist'

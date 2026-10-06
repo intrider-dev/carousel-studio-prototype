@@ -9,7 +9,7 @@ async (page) => {
     await page.waitForFunction(() => [...document.querySelectorAll('button')].some(b => b.textContent === 'Добавить группу' && !b.disabled) || [...document.querySelectorAll('[role="alert"]')].some(e => e.getClientRects().length), null, { timeout: 600000 })
     if (await page.getByRole('alert').count()) throw new Error(await page.getByRole('alert').allTextContents())
   }
-  await page.getByRole('button', { name: 'Создание слайдов', exact: true }).click()
+  await page.getByRole('tab', { name: 'Создание слайдов', exact: true }).click()
   await page.getByLabel('Запрос', { exact: true }).fill('Создай ровно 3 слайда о предметной фотографии кофе. Короткие заголовки и по одному совету до 100 символов.')
   await page.getByRole('button', { name: 'Отправить запрос', exact: true }).click()
   await waitProposal()

@@ -5,7 +5,7 @@ async (page) => {
  await page.goto('http://localhost:3080/')
  await page.getByRole('heading',{name:'Редактор слайдов',exact:true}).waitFor()
  await page.setViewportSize({width:1600,height:1100})
- await page.getByRole('button',{name:'Дизайн',exact:true}).click()
+ await page.getByRole('tab',{name:'Дизайн',exact:true}).click()
  await page.screenshot({path:'output/playwright/compact-editor.png',fullPage:true})
  await page.getByRole('link',{name:'Диалог',exact:true}).click()
  await page.getByRole('heading',{name:'Создание слайдов',exact:true}).waitFor()

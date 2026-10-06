@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+  Panel,
+  PanelHeader,
+  PanelTitle,
+  PanelDescription,
+  PanelBody,
+} from "@/components/application/panel/panel";
+import { Button } from "@/components/base/buttons/button";
+import { Badge } from "@/components/base/badges/badges";
 import type { Doc, Group } from "./model";
 import { inspectSlide } from "./quality";
 import type { QualityIssue } from "./quality";
@@ -109,26 +109,28 @@ export function QualityPanel({
   }, [doc, group]);
   const errors = issues.filter((i) => i.severity === "error").length;
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Проверка серии</CardTitle>
-        <CardDescription>
+    <Panel>
+      <PanelHeader>
+        <PanelTitle>Проверка серии</PanelTitle>
+        <PanelDescription>
           Факты и детали фото проверьте вручную.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
+        </PanelDescription>
+      </PanelHeader>
+      <PanelBody className="space-y-3">
         <div className="flex flex-wrap gap-2">
-          <Badge variant={!loading && errors ? "destructive" : "secondary"}>
+          <Badge type="pill-color" color={!loading && errors ? "error" : "gray"}>
             {loading
               ? "Проверяю…"
               : errors
                 ? `Ошибок: ${errors}`
                 : "Критических ошибок нет"}
           </Badge>
-          {!loading && <Badge variant="outline">Замечаний: {issues.length - errors}</Badge>}
+          {!loading && (
+            <Badge type="modern">Замечаний: {issues.length - errors}</Badge>
+          )}
         </div>
         {!loading && !issues.length && (
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-tertiary">
             Серия прошла техническую проверку.
           </p>
         )}
@@ -136,12 +138,12 @@ export function QualityPanel({
           {issues.map((issue, i) => (
             <Button
               key={`${issue.slideId}-${issue.layerId}-${i}`}
-              variant="outline"
+              color="secondary"
               className="h-auto w-full justify-start whitespace-normal text-left"
               onClick={() => onSelect(issue.slideId, issue.layerId)}
             >
               <span className="space-y-1">
-                <span className="block text-xs text-muted-foreground">
+                <span className="block text-xs text-tertiary">
                   Слайд{" "}
                   {group.slides.findIndex((s) => s.id === issue.slideId) + 1} ·{" "}
                   {issue.severity === "error" ? "Исправить" : "Проверить"}
@@ -158,7 +160,7 @@ export function QualityPanel({
           {group.slides.map((slide, i) => (
             <Button
               key={slide.id}
-              variant="ghost"
+              color="tertiary"
               className="h-auto min-w-0 flex-col items-stretch justify-start gap-3 whitespace-normal p-2 text-left"
               aria-label={`Проверить слайд ${i + 1}`}
               onClick={() => onSelect(slide.id)}
@@ -166,21 +168,18 @@ export function QualityPanel({
               <SlideThumbnail doc={doc} slide={slide} large />
               <span className="flex items-start justify-between gap-2">
                 <span className="min-w-0">
-                  <span className="block text-xs font-normal text-muted-foreground">
+                  <span className="block text-xs font-normal text-tertiary">
                     Слайд {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="line-clamp-2 block pt-1">{slide.title}</span>
                 </span>
                 {!loading && (
                   <Badge
-                    variant={
+                    type="pill-color"
+                    color={
                       issues.some(
-                        (issue) =>
-                          issue.slideId === slide.id &&
-                          issue.severity === "error",
-                      )
-                        ? "destructive"
-                        : "secondary"
+                        (issue) => issue.slideId === slide.id && issue.severity === "error",
+                      ) ? "error" : "gray"
                     }
                   >
                     {issues.filter((issue) => issue.slideId === slide.id)
@@ -191,7 +190,7 @@ export function QualityPanel({
             </Button>
           ))}
         </div>
-      </CardContent>
-    </Card>
+      </PanelBody>
+    </Panel>
   );
 }

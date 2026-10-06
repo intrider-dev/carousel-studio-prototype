@@ -1,8 +1,13 @@
 import { useLayoutEffect, useRef } from "react";
 import type { ReactNode } from "react";
-import { Collapsible } from "@base-ui/react/collapsible";
-import { ChevronDown, LoaderCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import {
+  Disclosure as AriaDisclosure,
+  DisclosurePanel,
+  Heading,
+} from "react-aria-components";
+import { ChevronDown } from "@untitledui/icons";
+import { LoadingIndicator } from "@/components/application/loading-indicator/loading-indicator";
+import { Button } from "@/components/base/buttons/button";
 
 export function MotionRegion({
   children,
@@ -52,44 +57,48 @@ export function Disclosure({
   description?: ReactNode;
 }) {
   return (
-    <Collapsible.Root
-      defaultOpen={defaultOpen}
+    <AriaDisclosure
+      defaultExpanded={defaultOpen}
       className={className}
       data-slot="disclosure"
     >
-      <Collapsible.Trigger
-        render={<Button variant="ghost" />}
-        className="group h-auto min-h-9 w-full justify-between gap-3 whitespace-normal px-2 py-2 text-left"
-      >
-        <span className="min-w-0">
-          <span className="block">{title}</span>
-          {description && (
-            <span className="mt-1 block text-xs font-normal text-muted-foreground">
-              {description}
-            </span>
-          )}
-        </span>
-        <ChevronDown
-          aria-hidden="true"
-          className="disclosure-chevron size-4 group-data-open:rotate-180"
-        />
-      </Collapsible.Trigger>
-      <Collapsible.Panel className="disclosure-panel">
+      <Heading>
+        <Button
+          slot="trigger"
+          color="tertiary"
+          className="h-auto w-full justify-between whitespace-normal text-left"
+          iconTrailing={
+            <ChevronDown
+              data-icon="trailing"
+              className="disclosure-chevron size-5 shrink-0"
+            />
+          }
+        >
+          <span className="min-w-0">
+            <span className="block">{title}</span>
+            {description && (
+              <span className="mt-1 block text-xs font-normal text-tertiary">
+                {description}
+              </span>
+            )}
+          </span>
+        </Button>
+      </Heading>
+      <DisclosurePanel className="disclosure-panel">
         <div className="pt-4">{children}</div>
-      </Collapsible.Panel>
-    </Collapsible.Root>
+      </DisclosurePanel>
+    </AriaDisclosure>
   );
 }
 export function Pending({ children }: { children: ReactNode }) {
   return (
     <div
       role="status"
-      className="flex items-center gap-2 text-sm text-muted-foreground"
+      className="flex items-center gap-2 text-sm text-tertiary"
     >
-      <LoaderCircle
-        className="pending-spinner size-4 shrink-0"
-        aria-hidden="true"
-      />
+      <span aria-hidden="true">
+        <LoadingIndicator size="sm" />
+      </span>
       {children}
     </div>
   );

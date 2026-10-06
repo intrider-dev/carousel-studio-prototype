@@ -1,5 +1,7 @@
 // oxlint-disable-next-line no-unused-expressions -- Evaluated by the browser CLI.
 async(page)=>{
+ const setCheckbox=async(locator,value)=>{if(await locator.isChecked()!==value)await locator.locator('xpath=ancestor::label').click();if(await locator.isChecked()!==value)throw new Error('Checkbox did not change') }
+
  const checks=[],errors=[],check=(ok,label)=>{if(!ok)throw new Error(label);checks.push(label)}
  page.on('pageerror',e=>errors.push(e.message))
  await page.goto('http://localhost:3080/')
@@ -9,16 +11,16 @@ async(page)=>{
  await page.getByRole('button',{name:'Создать проект',exact:true}).click()
  await page.getByRole('heading',{name:'Редактор слайдов',exact:true}).waitFor()
  const originalGroupCount=await page.locator('#group option').count()
- await page.getByRole('button',{name:'Свойства',exact:true}).click()
+ await page.getByRole('tab',{name:'Свойства',exact:true}).click()
  await page.setViewportSize({width:1600,height:1000})
  check(await page.getByRole('link',{name:'Редактор',exact:true}).getAttribute('aria-current')==='page','Navigation identifies the active page')
  await page.getByRole('button',{name:'Заголовок',exact:true}).click()
  const layerText=await page.getByLabel('Текст слоя',{exact:true}).inputValue()
- const geometry=await page.evaluate(()=>({properties:document.querySelector('.properties-stack [data-slot="card"]:not(.layer-stack)').getBoundingClientRect().top,layers:document.querySelector('.layer-stack').getBoundingClientRect().top,text:document.querySelector('#layer-text').getBoundingClientRect().top,height:innerHeight,order:!!(document.querySelector('#layer-text').compareDocumentPosition(document.querySelector('.layer-stack'))&Node.DOCUMENT_POSITION_FOLLOWING)}))
+ const geometry=await page.evaluate(()=>({properties:document.querySelector('.properties-stack [data-panel]:not(.layer-stack)').getBoundingClientRect().top,layers:document.querySelector('.layer-stack').getBoundingClientRect().top,text:document.querySelector('#layer-text').getBoundingClientRect().top,height:innerHeight,order:!!(document.querySelector('#layer-text').compareDocumentPosition(document.querySelector('.layer-stack'))&Node.DOCUMENT_POSITION_FOLLOWING)}))
  check(geometry.properties<geometry.layers&&geometry.text<geometry.height&&geometry.order,'Selected text controls appear before the layer list and fit the viewport')
- await page.getByRole('button',{name:'Бриф и бренд',exact:true}).click()
+ await page.getByRole('tab',{name:'Бриф и бренд',exact:true}).click()
  check(!await page.getByRole('region',{name:'Холст слайда',exact:true}).isVisible()&&!await page.getByRole('complementary',{name:'Панель редактирования',exact:true}).isVisible(),'Brief opens without unrelated canvas and inspector panels')
- await page.getByRole('button',{name:'Проверка серии',exact:true}).click()
+ await page.getByRole('tab',{name:'Проверка серии',exact:true}).click()
  check(!await page.getByRole('region',{name:'Холст слайда',exact:true}).isVisible(),'Review opens as a focused workspace')
  await page.getByRole('button',{name:'Проверить слайд 1',exact:true}).click()
  check(await page.getByRole('region',{name:'Холст слайда',exact:true}).isVisible(),'Series preview opens the selected slide in the editor')
@@ -38,10 +40,10 @@ async(page)=>{
  await page.getByRole('button',{name:'Проекты',exact:true}).click()
  const dialog=page.getByRole('dialog',{name:'Проекты',exact:true})
  await dialog.waitFor()
- await page.waitForFunction(()=>document.querySelector('[data-slot="dialog-content"]')?.contains(document.activeElement))
+ await page.waitForFunction(()=>document.querySelector('[role="dialog"]')?.contains(document.activeElement))
  check((await page.locator('[aria-label="Холст слайда"]').boundingBox()).y===before.y,'Opening the library does not shift the editor')
  await page.keyboard.press('Tab')
- await page.waitForFunction(()=>document.querySelector('[data-slot="dialog-content"]')?.contains(document.activeElement))
+ await page.waitForFunction(()=>document.querySelector('[role="dialog"]')?.contains(document.activeElement))
  check(await dialog.evaluate(e=>e.contains(document.activeElement)),'Library keeps keyboard focus inside the dialog')
  await page.keyboard.press('Escape');await dialog.waitFor({state:'hidden'})
  await page.waitForFunction(()=>document.activeElement?.id==='project-library-trigger')
@@ -78,7 +80,7 @@ async(page)=>{
  await page.getByLabel('Количество слайдов',{exact:true}).selectOption('1')
  await page.locator('#model').selectOption(await page.locator('#model option').nth(1).getAttribute('value'))
  await page.locator('#image-model').selectOption(await page.locator('#image-model option').nth(1).getAttribute('value'))
- await page.getByLabel('Сразу создавать изображения',{exact:true}).uncheck()
+ await setCheckbox(page.getByLabel('Сразу создавать изображения',{exact:true}),false)
  let releaseImage,imageCalls=0
  const picture=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=1024;c.height=1024;c.getContext('2d').fillStyle='#678b6b';c.getContext('2d').fillRect(0,0,1024,1024);return c.toDataURL('image/png')})
  await page.route('**/studio-api/complete',route=>{

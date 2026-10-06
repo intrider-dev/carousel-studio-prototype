@@ -1,5 +1,7 @@
 // oxlint-disable-next-line no-unused-expressions -- Evaluated by the browser CLI.
 async (page) => {
+ const setCheckbox=async(locator,value)=>{if(await locator.isChecked()!==value)await locator.locator('xpath=ancestor::label').click();if(await locator.isChecked()!==value)throw new Error('Checkbox did not change') }
+
  await page.setViewportSize({width:1600,height:1100})
  await page.goto('http://localhost:3080/')
  await page.getByRole('heading',{name:'Новая карусель',exact:true}).waitFor()
@@ -17,7 +19,7 @@ async (page) => {
  await page.waitForFunction(()=>document.querySelector('#model')?.options.length>2)
  await page.locator('#model').selectOption('openrouter/free')
  await page.locator('#image-model').selectOption('google/gemini-2.5-flash-image')
- await page.getByLabel('Сразу создавать изображения',{exact:true}).uncheck()
+ await setCheckbox(page.getByLabel('Сразу создавать изображения',{exact:true}),false)
  await page.getByRole('button',{name:/^Настройки/}).first().click()
  await page.getByLabel('Запрос',{exact:true}).fill('Создай карусель из четырёх слайдов по брифу.')
  const response=page.waitForResponse(response=>response.url().endsWith('/studio-api/complete')&&response.request().postDataJSON().action==='generate',{timeout:190000})
