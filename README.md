@@ -4,9 +4,11 @@
 
 **A local prototype, not a production service.** Create carousel slides from a prompt, review the plan, generate pictures, and edit the result as separate layers.
 
+**Untitled UI version:** [`feature/untitled-ui`](https://github.com/intrider-dev/carousel-studio-prototype/tree/feature/untitled-ui). This README and the interface screenshots describe this branch.
+
 ![Carousel editor with a generated four-slide series](docs/screenshots/editor.png)
 
-*Editor: a four-slide series with separate text, picture, and graphic layers.*
+*Untitled UI editor: a four-slide series with separate text, picture, and graphic layers.*
 
 ## Features
 
@@ -69,9 +71,15 @@ Six image techniques in the same poster layout, typeface, and palette. Only the 
 
 ## Screenshots
 
-The interface currently uses Russian. FORM is a fictional demonstration collection.
+These screenshots show the **Untitled UI** interface in `feature/untitled-ui`. The interface currently uses Russian. FORM is a fictional demonstration collection.
 
-### Setup and editing
+### Project setup
+
+![New project in Untitled UI](docs/screenshots/setup.png)
+
+*New project: size, topic, visual direction, and optional brand.*
+
+### Brand and layer editing
 
 ![Brand and brief settings](docs/screenshots/brand.png)
 
@@ -103,12 +111,18 @@ The dialogue screenshot shows a controlled preview response. It demonstrates the
 
 *Phone view: the canvas and selected text layer.*
 
+### Simple template
+
+![Manual checklist in Untitled UI](docs/screenshots/basic.png)
+
+*Manual checklist: brand settings, slide preview, and three steps from editing to download.*
+
 ## Run with Docker
 
 Requires Docker with Compose. The image pins **Node.js 26.10.0**.
 
 ```sh
-git clone https://github.com/intrider-dev/carousel-studio-prototype.git
+git clone --branch feature/untitled-ui https://github.com/intrider-dev/carousel-studio-prototype.git
 cd carousel-studio-prototype
 mkdir ../carousel-studio-config
 cp provider.env.example ../carousel-studio-config/provider.env

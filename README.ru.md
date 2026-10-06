@@ -4,9 +4,11 @@
 
 **Локальный прототип, не готовый коммерческий сервис.** Создание каруселей по запросу: согласование плана, генерация изображений и редактирование отдельных слоёв.
 
+**Версия на Untitled UI:** [`feature/untitled-ui`](https://github.com/intrider-dev/carousel-studio-prototype/tree/feature/untitled-ui). Этот README и скриншоты интерфейса относятся к этой ветке.
+
 ![Редактор с серией из четырёх слайдов](docs/screenshots/editor.png)
 
-*Редактор: серия из четырёх слайдов с отдельными слоями текста, изображений и фигур.*
+*Редактор на Untitled UI: серия из четырёх слайдов с отдельными слоями текста, изображений и фигур.*
 
 ## Возможности
 
@@ -69,9 +71,15 @@
 
 ## Скриншоты
 
-Интерфейс на русском. FORM - вымышленная коллекция для демонстрации.
+На скриншотах показан интерфейс **Untitled UI** из ветки `feature/untitled-ui`. Интерфейс на русском. FORM - вымышленная коллекция для демонстрации.
 
-### Настройка и редактирование
+### Создание проекта
+
+![Новый проект на Untitled UI](docs/screenshots/setup.png)
+
+*Новый проект: размер, тема, оформление и при необходимости бренд.*
+
+### Бренд и редактирование слоёв
 
 ![Бриф и бренд](docs/screenshots/brand.png)
 
@@ -103,12 +111,18 @@
 
 *Редактор на телефоне: холст и выбранный текстовый слой.*
 
+### Простой шаблон
+
+![Ручной чек-лист на Untitled UI](docs/screenshots/basic.png)
+
+*Ручной чек-лист: настройки бренда, просмотр слайда и три шага от редактирования до скачивания.*
+
 ## Запуск через Docker
 
 Нужен Docker с Compose. В образе закреплён **Node.js 26.10.0**.
 
 ```sh
-git clone https://github.com/intrider-dev/carousel-studio-prototype.git
+git clone --branch feature/untitled-ui https://github.com/intrider-dev/carousel-studio-prototype.git
 cd carousel-studio-prototype
 mkdir ../carousel-studio-config
 cp provider.env.example ../carousel-studio-config/provider.env

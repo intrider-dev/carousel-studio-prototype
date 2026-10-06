@@ -1,5 +1,17 @@
 // oxlint-disable-next-line no-unused-expressions -- Evaluated by the browser CLI.
 async (page) => {
+ const context=await page.context().browser().newContext({viewport:{width:1600,height:1100}})
+ const preview=await context.newPage()
+ try {
+  await preview.goto('http://localhost:3080/')
+  await preview.getByRole('button',{name:'Создать проект',exact:true}).waitFor()
+  await preview.evaluate(()=>document.fonts.ready)
+  await preview.screenshot({path:'docs/screenshots/setup.png',fullPage:true})
+  await preview.goto('http://localhost:3080/basic')
+  await preview.getByRole('heading',{name:'Новая карусель',exact:true}).waitFor()
+  await preview.evaluate(()=>document.fonts.ready)
+  await preview.screenshot({path:'docs/screenshots/basic.png',fullPage:true})
+ } finally {await context.close()}
  await page.goto('http://localhost:3080/')
  await page.waitForFunction(()=>[...document.querySelectorAll('h1')].some(e=>['Новая карусель','Редактор слайдов'].includes(e.textContent)))
  if(await page.getByRole('button',{name:'Создать проект',exact:true}).count())await page.getByRole('button',{name:'Создать проект',exact:true}).click()
@@ -54,5 +66,5 @@ async (page) => {
  await page.screenshot({path:'docs/screenshots/dialog.png',fullPage:true})
  await clear.click()
  await page.unroute('**/studio-api/complete')
- return {screenshots:6,slides:4,previewOnly:true}
+ return {screenshots:8,slides:4,previewOnly:true}
 }
